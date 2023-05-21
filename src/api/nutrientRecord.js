@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BACKEND_URL = 'http://192.168.45.248:8888/nutrient/';
+const BACKEND_URL =
+  "http://k8s-default-backendi-feb8c9a7e2-53368050.ap-northeast-2.elb.amazonaws.com/nutrient";
 
 export async function saveNutrientRecord(token, nutrientRecord) {
   const response = await axios.get(
@@ -12,7 +13,7 @@ export async function saveNutrientRecord(token, nutrientRecord) {
     }
   );
 
-  console.log('Post request successful:', response.data.message);
+  console.log("Post request successful:", response.data.message);
 }
 
 export async function getNutrientRecord(token) {
@@ -25,7 +26,7 @@ export async function getNutrientRecord(token) {
     }
   );
 
-  console.log('Get request successful:', response.data.message);
+  console.log("Get request successful:", response.data.message);
 
   const nutrientRecord = JSON.parse(response.data.data);
 

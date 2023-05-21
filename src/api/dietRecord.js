@@ -1,12 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BACKEND_URL = 'http://192.168.45.248:8888/diet/token/diet';
+const BACKEND_URL =
+  "http://k8s-default-backendi-feb8c9a7e2-53368050.ap-northeast-2.elb.amazonaws.com/diet";
 
 // id 추가
 const id = {
-  DEFAULT: '',
-  ID: '',
+  DEFAULT: "",
+  ID: "",
 };
+
+// 검색 시작, 종료 날짜 설정 가능 (종료 날짜는 설정 안 하면 비워두는 걸로)
 
 export async function saveDietRecord(token, dietRecord) {
   const response = await axios.get(
@@ -18,7 +21,7 @@ export async function saveDietRecord(token, dietRecord) {
     }
   );
 
-  console.log('Post request successful:', response.data.message);
+  console.log("Post request successful:", response.data.message);
 }
 
 export async function getDietRecord(token) {
@@ -31,7 +34,7 @@ export async function getDietRecord(token) {
     }
   );
 
-  console.log('Get request successful:', response.data.message);
+  console.log("Get request successful:", response.data.message);
 
   const dietRecord = JSON.parse(response.data.data);
 
