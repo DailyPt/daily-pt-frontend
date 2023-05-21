@@ -63,9 +63,13 @@ const AddDietResultScreen = () => {
             <Text style={styles.searchTitle}>혹시 잘못 인식되었나요?</Text>
             <MaterialCommunityIcons
               name="feature-search-outline"
-              size={25}
+              style={{
+                paddingTop: 3,
+                paddingBottom: 5,
+              }}
+              size={20}
               onPress={() =>
-                navigation.navigate("AddDietTextSearch", { data: imageUri })
+                navigation.navigate("AddDietTextSearch", { uri: uri })
               }
             />
           </View>
@@ -158,8 +162,9 @@ const styles = StyleSheet.create({
 
   searchTitle: {
     fontWeight: "700",
-    fontSize: 25,
-    marginRight: 30,
+    fontSize: 20,
+    marginRight: 10,
+    padding: 5,
   },
 
   searchSubtitle: {
