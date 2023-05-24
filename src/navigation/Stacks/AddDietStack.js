@@ -1,10 +1,11 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AddDietImageScreen from '../../screens/AddDietScreen/AddDietImageScreen';
-import AddDietAnalyzeScreen from '../../screens/AddDietScreen/AddDietAnalyzeScreen';
-import AddDietResultScreen from '../../screens/AddDietScreen/AddDietResultScreen';
-import AddDietSettingScreen from '../../screens/AddDietScreen/AddDietSettingScreen';
-import AddDietTextSearchScreen from '../../screens/AddDietScreen/AddDietTextSearchScreen';
-import AddDietRecordScreen from '../../screens/AddDietScreen/AddDietRecordScreen';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AddDietImageScreen from "../../screens/AddDietScreen/AddDietImageScreen";
+import AddDietAnalyzeScreen from "../../screens/AddDietScreen/AddDietAnalyzeScreen";
+import AddDietResultScreen from "../../screens/AddDietScreen/AddDietResultScreen";
+import AddDietSettingScreen from "../../screens/AddDietScreen/AddDietSettingScreen";
+import AddDietTextSearchScreen from "../../screens/AddDietScreen/AddDietTextSearchScreen";
+import AddDietDetailScreen from "../../screens/AddDietScreen/AddDietDetailScreen";
+import AddDietRecordScreen from "../../screens/AddDietScreen/AddDietRecordScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ const AddDietStack = () => {
         name="AddDietTextSearch"
         component={AddDietTextSearchScreen}
       />
+      <Stack.Screen name="AddDietDetail" component={AddDietDetailScreen} />
       <Stack.Screen name="AddDietRecord" component={AddDietRecordScreen} />
     </Stack.Navigator>
   );

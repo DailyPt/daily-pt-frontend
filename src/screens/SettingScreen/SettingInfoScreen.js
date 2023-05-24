@@ -1,14 +1,15 @@
-import { View, Image, StyleSheet, Dimensions, Text } from 'react-native';
-import { AuthContext } from '../../store/auth-context';
-import { useState, useContext, useEffect } from 'react';
-import { getUserInfo, modifyUserInfo } from '../../api/userInfo';
+import { View, Image, StyleSheet, Dimensions, Text } from "react-native";
+import { AuthContext } from "../../store/auth-context";
+import { useState, useContext, useEffect } from "react";
+import { getUserInfo, modifyUserInfo } from "../../api/userInfo";
 import SettingInput, {
   keyBoardType,
   ReturnKeyTypes,
-} from '../../components/SettingInput';
-import SignInButton from '../../components/SignInButton';
-import SafeInputView from '../../components/SafeInputView';
-import { useNavigation } from '@react-navigation/native';
+} from "../../components/SettingInput";
+import SignInButton from "../../components/SignInButton";
+import SafeInputView from "../../components/SafeInputView";
+import { useNavigation } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const SettingInfoScreen = () => {
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ const SettingInfoScreen = () => {
   const [prevUserGender, setPrevUserGender] = useState();
   const [userGender, setUserGender] = useState();
 
-  const prevUserBirth = '1999/02/25';
+  const prevUserBirth = "1999/02/25";
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -38,13 +39,13 @@ const SettingInfoScreen = () => {
         setPrevUserHeight(receivedInfo.height.toString());
         setPrevUserWeight(receivedInfo.weight.toString());
 
-        if (receivedInfo.gender === 'male') {
-          setPrevUserGender('남성');
+        if (receivedInfo.gender === "male") {
+          setPrevUserGender("남성");
         } else {
-          setPrevUserGender('여성');
+          setPrevUserGender("여성");
         }
       } catch (error) {
-        console.error('Error fetching userInfo:', error);
+        console.error("Error fetching userInfo:", error);
       }
     };
 
@@ -58,14 +59,14 @@ const SettingInfoScreen = () => {
         birth: userBirth || prevUserBirth,
         height: parseFloat(userHeight) || parseFloat(prevUserHeight),
         weight: parseFloat(userWeight) || parseFloat(prevUserWeight),
-        gender: (userGender === '남성' ? 'male' : 'female') || prevUserGender,
+        gender: (userGender === "남성" ? "male" : "female") || prevUserGender,
       };
 
       console.log(newUserInfo);
 
       await modifyUserInfo(authContext.token, newUserInfo);
     }
-    navigation.navigate('Main');
+    navigation.navigate("Main");
   };
 
   useEffect(() => {
@@ -93,19 +94,19 @@ const SettingInfoScreen = () => {
 
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
-      case 'name':
+      case "name":
         setUserName(enteredValue);
         break;
-      case 'birth':
+      case "birth":
         setUserBirth(enteredValue);
         break;
-      case 'height':
+      case "height":
         setUserHeight(enteredValue);
         break;
-      case 'weight':
+      case "weight":
         setUserWeight(enteredValue);
         break;
-      case 'gender':
+      case "gender":
         setUserGender(enteredValue);
         break;
     }
@@ -119,72 +120,72 @@ const SettingInfoScreen = () => {
         <View style={styles.title}>
           <Image
             style={styles.edit}
-            source={require('../../../assets/SettingEdit.png')}
+            source={require("../../../assets/SettingEdit.png")}
           />
         </View>
-        <View style={styles.editWindow}>
+        <KeyboardAwareScrollView style={styles.editWindow}>
           <View style={styles.editInput}>
             <Text style={styles.editTitle}>이름</Text>
             <SettingInput
-              title={'이름'}
+              title={"이름"}
               placeholder={prevUserName}
               keyboardType={keyBoardType.DEFAULT}
               returnKeyType={ReturnKeyTypes.NEXT}
-              textContentType={'name'}
+              textContentType={"name"}
               value={userName}
-              onChangeText={updateInputValueHandler.bind(this, 'name')}
+              onChangeText={updateInputValueHandler.bind(this, "name")}
             />
           </View>
 
           <View style={styles.editInput}>
             <Text style={styles.editTitle}>생일</Text>
             <SettingInput
-              title={'생일'}
+              title={"생일"}
               placeholder={prevUserBirth}
               keyBoardType={keyBoardType.DEFAULT}
               returnKeyType={ReturnKeyTypes.NEXT}
-              textContentType={'none'}
+              textContentType={"none"}
               value={userBirth}
-              onChangeText={updateInputValueHandler.bind(this, 'birth')}
+              onChangeText={updateInputValueHandler.bind(this, "birth")}
             />
           </View>
 
           <View style={styles.editInput}>
             <Text style={styles.editTitle}>신장</Text>
             <SettingInput
-              title={'신장'}
-              placeholder={prevUserHeight}
+              title={"신장"}
+              placeholder={`${prevUserHeight} cm`}
               keyBoardType={keyBoardType.NUMBER}
               returnKeyType={ReturnKeyTypes.NEXT}
-              textContentType={'none'}
+              textContentType={"none"}
               value={userHeight}
-              onChangeText={updateInputValueHandler.bind(this, 'height')}
+              onChangeText={updateInputValueHandler.bind(this, "height")}
             />
           </View>
 
           <View style={styles.editInput}>
             <Text style={styles.editTitle}>체중</Text>
             <SettingInput
-              title={'체중'}
-              placeholder={prevUserWeight}
+              title={"체중"}
+              placeholder={`${prevUserWeight} kg`}
               keyBoardType={keyBoardType.NUMBER}
               returnKeyType={ReturnKeyTypes.NEXT}
-              textContentType={'none'}
+              textContentType={"none"}
               value={userWeight}
-              onChangeText={updateInputValueHandler.bind(this, 'weight')}
+              onChangeText={updateInputValueHandler.bind(this, "weight")}
             />
           </View>
 
           <View style={styles.editInput}>
             <Text style={styles.editTitle}>성별</Text>
             <SettingInput
-              title={'성별'}
+              title={"성별"}
               placeholder={prevUserGender}
               keyboardType={keyBoardType.DEFAULT}
               returnKeyType={ReturnKeyTypes.DONE}
-              textContentType={'none'}
+              textContentType={"none"}
               value={userGender}
-              onChangeText={updateInputValueHandler.bind(this, 'gender')}
+              onChangeText={updateInputValueHandler.bind(this, "gender")}
             />
           </View>
           <SignInButton
@@ -192,7 +193,7 @@ const SettingInfoScreen = () => {
             onPress={() => updateUserInfo()}
             disabled={disabled}
           />
-        </View>
+        </KeyboardAwareScrollView>
       </View>
     </SafeInputView>
   );
@@ -201,46 +202,46 @@ const SettingInfoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: Dimensions.get('window').width,
-    height: '50%',
-    backgroundColor: '#AD94F7',
-    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    height: "50%",
+    backgroundColor: "#AD94F7",
+    alignItems: "center",
   },
   edit: {
-    position: 'absolute',
-    top: '7%',
+    position: "absolute",
+    top: "7%",
     width: 100,
     height: 100,
   },
   editWindow: {
-    position: 'absolute',
-    top: '20%',
+    position: "absolute",
+    top: "20%",
+    width: "100%",
     left: 0,
     bottom: 0,
     right: 0,
     zIndex: 10,
-    padding: 30,
+    padding: 60,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: '#F8F8FA',
-    justifyContent: 'center',
+    backgroundColor: "#F8F8FA",
   },
   editInput: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 30,
   },
   editTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginRight: 10,
   },
 });

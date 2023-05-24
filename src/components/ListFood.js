@@ -3,7 +3,7 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const ListFood = memo(({ item }) => {
+const ListFood = memo(({ item, onPress }) => {
   console.log(item.id);
 
   return (
@@ -36,7 +36,7 @@ const ListFood = memo(({ item }) => {
         {Math.round(item.kcal)} kcal
       </Text>
 
-      <Pressable onPress={() => {}} hitSlop={10}>
+      <Pressable onPress={() => onPress(item)} hitSlop={30}>
         <MaterialCommunityIcons
           name="plus-circle"
           size={30}
@@ -51,6 +51,7 @@ ListFood.displayName = "ListFood";
 
 ListFood.propTypes = {
   item: PropTypes.object.isRequired,
+  onPress: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -1,37 +1,41 @@
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import { View, StyleSheet, Text, Dimensions } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import Button from "../../components/Button";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const AddNutrientSettingScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const { supplement } = route.params;
+  console.log(supplement);
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.setting}>
-        <Text style={styles.foodTitle}>락토핏 생유산균 골드</Text>
-        <Text style={styles.foodCalorie}>255kcal</Text>
+        <Text style={styles.foodTitle}>{supplement.productName}</Text>
+        <Text style={styles.foodCalorie}>{supplement.srvUse}</Text>
         <View
           style={{
-            position: 'absolute',
-            top: '30%',
-            width: Dimensions.get('window').width,
-            borderColor: '#F3F4F6',
+            position: "absolute",
+            top: "30%",
+            width: Dimensions.get("window").width,
+            borderColor: "#F3F4F6",
             borderWidth: 5,
             borderBottomWidth: StyleSheet.hairlineWidth,
           }}
         />
         <View
           style={{
-            position: 'absolute',
-            top: '50%',
+            position: "absolute",
+            top: "50%",
           }}
         ></View>
         <View style={styles.setButton}>
           <Button
-            title={'저장하기'}
-            onPress={() => navigation.navigate('Main', { screen: 'Nutrient' })}
+            title={"저장하기"}
+            onPress={() => navigation.navigate("Main", { screen: "Nutrient" })}
           />
         </View>
       </View>
@@ -42,36 +46,40 @@ const AddNutrientSettingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
+    backgroundColor: "#000",
+    alignItems: "center",
   },
   setting: {
-    position: 'absolute',
-    top: '10%',
+    position: "absolute",
+    top: "10%",
     left: 0,
     bottom: 0,
     right: 0,
     zIndex: 10,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: '#F8F8FA',
-    alignItems: 'center',
+    backgroundColor: "#F8F8FA",
+    alignItems: "center",
   },
   foodTitle: {
-    fontWeight: '700',
+    fontWeight: "700",
     fontSize: 30,
-    position: 'absolute',
-    top: '5%',
+    position: "absolute",
+    top: "5%",
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   foodCalorie: {
-    color: '#999999',
+    color: "#999999",
     fontSize: 15,
-    position: 'absolute',
-    top: '10%',
+    position: "absolute",
+    top: "15%",
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   setButton: {
-    position: 'absolute',
-    bottom: '5%',
+    position: "absolute",
+    bottom: "5%",
   },
 });
 

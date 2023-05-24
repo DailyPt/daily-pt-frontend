@@ -12,31 +12,36 @@ const id = {
 // 검색 시작, 종료 날짜 설정 가능 (종료 날짜는 설정 안 하면 비워두는 걸로)
 
 export async function saveDietRecord(token, dietRecord) {
-  const response = await axios.get(
-    BACKEND_URL + id.DEFAULT,
-    JSON.stringify(dietRecord),
-    {
-      headers: { authorization: `Bearer ${token}` },
+  try {
+    const response = await axios.post(BACKEND_URL + id.DEFAULT, dietRecord, {
+      headers: {
+        "Content-Type": `application/json`,
+        authorization: `Bearer ${token}`,
+      },
       withCredentials: true,
-    }
-  );
+    });
+    console.log("Post request successful:", response.data.message);
 
-  console.log("Post request successful:", response.data.message);
+    return response.data.data;
+  } catch (error) {
+    console.log("Save Diet Record Error: ", error);
+  }
 }
 
-export async function getDietRecord(token) {
-  const response = await axios.get(
-    BACKEND_URL,
-    {},
-    {
+export async function getDietRecord(token, start, end) {
+  try {
+    const response = await axios.get(BACKEND_URL, {
+      params: { start: start, end: end },
       headers: { authorization: `Bearer ${token}` },
       withCredentials: true,
-    }
-  );
+    });
 
-  console.log("Get request successful:", response.data.message);
+    console.log("Get request successful:", response.data.message);
 
-  const dietRecord = JSON.parse(response.data.data);
+    const dietRecord = response.data.data;
 
-  return dietRecord;
+    return dietRecord;
+  } catch (error) {
+    console.log("Get Diet Record Error: ", error);
+  }
 }

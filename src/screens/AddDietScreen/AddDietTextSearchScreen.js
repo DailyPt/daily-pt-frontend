@@ -39,6 +39,10 @@ const AddDietTextSearchScreen = () => {
     setSearchResults([]);
   };
 
+  const onPress = (food) => {
+    navigation.navigate("AddDietSetting", { food });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -83,7 +87,9 @@ const AddDietTextSearchScreen = () => {
             data={searchResults}
             keyExtractor={(item) => item.id.toString()}
             windowSize={10}
-            renderItem={({ item }) => <ListFood item={item} />}
+            renderItem={({ item }) => (
+              <ListFood item={item} onPress={() => onPress(item)} />
+            )}
           />
         </View>
       ) : (

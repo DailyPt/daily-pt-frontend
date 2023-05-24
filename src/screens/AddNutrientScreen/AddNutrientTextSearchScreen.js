@@ -37,6 +37,10 @@ const AddNutrientTextSearchScreen = () => {
     setSearchResults([]);
   };
 
+  const onPress = (supplement) => {
+    navigation.navigate("AddNutrientSetting", { supplement });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -81,7 +85,9 @@ const AddNutrientTextSearchScreen = () => {
             data={searchResults}
             keyExtractor={(item) => item.id.toString()}
             windowSize={10}
-            renderItem={({ item }) => <ListSupplement item={item} />}
+            renderItem={({ item }) => (
+              <ListSupplement item={item} onPress={() => onPress(item)} />
+            )}
           />
         </View>
       ) : (

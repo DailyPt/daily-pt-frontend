@@ -1,15 +1,15 @@
-import { TextInput, Dimensions, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { TextInput, Dimensions, StyleSheet } from "react-native";
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 export const keyBoardType = {
-  DEFAULT: 'default',
-  NUMBER: 'numeric',
+  DEFAULT: "default",
+  NUMBER: "numeric",
 };
 
 export const ReturnKeyTypes = {
-  DONE: 'done',
-  NEXT: 'next',
+  DONE: "done",
+  NEXT: "next",
 };
 
 const SettingInput = ({ placeholder, keyBoardType, ...props }) => {
@@ -20,7 +20,7 @@ const SettingInput = ({ placeholder, keyBoardType, ...props }) => {
       {...props}
       style={[styles.input, isFocused && styles.focusedInput]}
       placeholder={placeholder}
-      placeholderTextColor={'#a3a3a3'}
+      placeholderTextColor={"#a3a3a3"}
       keyboardType={keyBoardType}
       autoCapitalize="none"
       autoCorrect={false}
@@ -43,13 +43,11 @@ SettingInput.propTypes = {
 
 const styles = StyleSheet.create({
   input: {
-    width: Dimensions.get('window').width * 0.7,
-    right: '0%',
-    backgroundColor: '#F8F8FA',
-    borderBottomColor: '#AD94F7',
+    width: "100%",
+    backgroundColor: "#F8F8FA",
+    borderBottomColor: "#AD94F7",
     borderBottomWidth: 1,
     padding: 10,
-    marginLeft: 10,
     fontSize: 20,
   },
 });

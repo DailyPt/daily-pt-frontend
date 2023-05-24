@@ -3,7 +3,7 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const ListSupplement = memo(({ item }) => {
+const ListSupplement = memo(({ item, onPress }) => {
   console.log(item.id);
 
   return (
@@ -30,7 +30,7 @@ const ListSupplement = memo(({ item }) => {
         </Text>
       </View>
 
-      <Pressable onPress={() => {}} hitSlop={10}>
+      <Pressable onPress={() => onPress(item)} hitSlop={10}>
         <MaterialCommunityIcons
           name="plus-circle"
           size={30}
@@ -45,6 +45,7 @@ ListSupplement.displayName = "ListSupplement";
 
 ListSupplement.propTypes = {
   item: PropTypes.object.isRequired,
+  onPress: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -5,22 +5,42 @@ import {
   Dimensions,
   Image,
   Text,
-} from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+} from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Button from "../../components/Button";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { saveDietRecord } from "../../api/dietRecord";
+import { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
 
 const AddDietRecordScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const authContext = useContext(AuthContext);
+
+  const { food, dietRecord } = route.params;
+  console.log(food);
+  console.log(dietRecord);
+
+  const saveRecord = async () => {
+    try {
+      await saveDietRecord(authContext.token, dietRecord);
+      navigation.navigate("Main", { screen: "Diet" });
+    } catch (error) {
+      console.log("Error saving diet record:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Pressable
-          onPress={() => navigation.navigate('AddDietSetting')}
+          onPress={() => navigation.navigate("AddDietSetting", { food })}
           hitSlop={10}
-          position={'absolute'}
-          left={'5%'}
-          bottom={'15%'}
+          position={"absolute"}
+          left={"5%"}
+          bottom={"15%"}
         >
           <MaterialCommunityIcons name="chevron-left" size={30} color="#000" />
         </Pressable>
@@ -32,12 +52,13 @@ const AddDietRecordScreen = () => {
         </Text>
         <Image
           style={styles.image}
-          source={require('../../../assets/AddDietRecord.png')}
+          source={require("../../../assets/AddDietRecord.png")}
         />
         <View style={styles.recordButton}>
           <Button
-            title={'저장하기'}
-            onPress={() => navigation.navigate('Main', { screen: 'Diet' })}
+            title={"저장하기"}
+            // onPress={() => saveRecord()}
+            onPress={() => navigation.navigate("Main", { screen: "Diet" })}
           />
         </View>
       </View>
@@ -48,48 +69,48 @@ const AddDietRecordScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get("window").width,
     height: 150,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "center",
   },
   record: {
-    position: 'absolute',
+    position: "absolute",
     top: 150,
     left: 0,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - 150,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height - 150,
+    backgroundColor: "#fff",
+    alignItems: "center",
   },
   recordTitle: {
-    fontWeight: '700',
+    fontWeight: "700",
     fontSize: 30,
-    position: 'absolute',
-    top: '5%',
+    position: "absolute",
+    top: "5%",
   },
   recordSubtitle: {
-    color: '#999999',
+    color: "#999999",
     fontSize: 15,
-    position: 'absolute',
-    top: '10%',
+    position: "absolute",
+    top: "12%",
   },
   image: {
     width: 200,
     height: 200,
-    position: 'absolute',
-    top: '25%',
+    position: "absolute",
+    top: "25%",
   },
   recordButton: {
-    position: 'absolute',
-    bottom: '5%',
+    position: "absolute",
+    bottom: "10%",
   },
 });
 

@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 const BACKEND_URL =
-  'http://k8s-default-backendi-feb8c9a7e2-53368050.ap-northeast-2.elb.amazonaws.com/user/login';
+  "http://k8s-default-backendi-feb8c9a7e2-53368050.ap-northeast-2.elb.amazonaws.com/user/login";
 
 export async function checkIsLogged(token) {
   try {
@@ -15,10 +15,11 @@ export async function checkIsLogged(token) {
     );
 
     const isProfileLogged = response.data.data.isProfileLogged;
-    console.log('CheckIsLogged success!');
+    console.log("CheckIsLogged success!");
+    console.log(token);
 
     return isProfileLogged;
   } catch (error) {
-    console.log('CheckIsLogged error : ', error);
+    console.log("CheckIsLogged error : ", error);
   }
 }
