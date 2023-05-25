@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "DailyPT"
@@ -23,9 +21,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,9 +35,7 @@
       ]
     ],
     "extra": {
-      "eas": {
-        "projectId": "ec8f461f-a008-411c-beb0-6d8d4505eeea"
-      }
+      "apiUrl": "k8s-default-frontend-fa3b3f9f0a-2080576929.ap-northeast-2.elb.amazonaws.com"
     }
   }
 }

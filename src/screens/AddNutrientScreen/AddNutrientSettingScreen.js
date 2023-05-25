@@ -75,13 +75,21 @@ const AddNutrientSettingScreen = () => {
   };
 
   console.log(selectedTimes);
+  const times = [];
+  for (let i = 0; i < selectedTimes.length; i++) {
+    const timeObject = selectedTimes[i];
+    const hour = timeObject.getHours().toString().padStart(2, "0");
+    const minute = timeObject.getMinutes().toString().padStart(2, "0");
+    const time = `${hour}:${minute}:00`;
+    times.push(time);
+  }
 
   const [quantity, setQuantity] = useState(0);
 
   const nutrientRoutine = {
     days: selectedDays, // array
     count: count,
-    times: selectedTimes, // array
+    times: times, // array
     quantity: quantity,
   };
 
