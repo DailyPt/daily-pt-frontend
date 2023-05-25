@@ -1,40 +1,265 @@
-import { View, StyleSheet, Text, Dimensions } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Button from "../../components/Button";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import DayPicker from "../../components/DayPicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useState, useContext } from "react";
+import NumericInput from "react-native-numeric-input";
+import { saveNutrientRoutine } from "../../api/nutrientRoutine";
+import { AuthContext } from "../../store/auth-context";
 
 const AddNutrientSettingScreen = () => {
+  const authContext = useContext(AuthContext);
   const navigation = useNavigation();
   const route = useRoute();
 
   const { supplement } = route.params;
   console.log(supplement);
 
+  const [selectedDays, setSelectedDays] = useState([]);
+
+  const handleDayPress = (day) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter((date) => date !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+
+  const [count, setCount] = useState(0);
+
+  const [selectedTimes, setSelectedTimes] = useState([]);
+  const handleTimeChange = (date, index) => {
+    const updatedTimes = [...selectedTimes];
+    updatedTimes[index] = date;
+    setSelectedTimes(updatedTimes);
+  };
+
+  const renderDateTimePickers = () => {
+    const pickers = [];
+    for (let i = 0; i < count; i++) {
+      pickers.push(
+        <View
+          key={i}
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            padding: 5,
+            marginVertical: 20,
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>
+            섭취 시간 {i + 1}
+          </Text>
+          <DateTimePicker
+            value={selectedTimes[i] || new Date()}
+            mode="time"
+            onChange={(event, time) => handleTimeChange(time, i)}
+            locale="ko-KR"
+            style={{
+              backgroundColor: "#F8F8FA",
+              width: 100,
+              position: "absolute",
+              right: "3%",
+              alignItems: "center",
+              marginVertical: 10,
+              paddingVertical: 10,
+            }}
+          />
+        </View>
+      );
+    }
+    return pickers;
+  };
+
+  console.log(selectedTimes);
+
+  const [quantity, setQuantity] = useState(0);
+
+  const nutrientRoutine = {
+    days: selectedDays, // array
+    count: count,
+    times: selectedTimes, // array
+    quantity: quantity,
+  };
+
+  console.log(nutrientRoutine);
+
+  const saveRoutine = async () => {
+    try {
+      await saveNutrientRoutine(authContext.token, nutrientRoutine);
+      navigation.navigate("Main", { screen: "Nutrient" });
+    } catch (error) {
+      console.log("Error saving nutrient routine:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.setting}>
-        <Text style={styles.foodTitle}>{supplement.productName}</Text>
-        <Text style={styles.foodCalorie}>{supplement.srvUse}</Text>
         <View
           style={{
-            position: "absolute",
-            top: "30%",
-            width: Dimensions.get("window").width,
-            borderColor: "#F3F4F6",
-            borderWidth: 5,
-            borderBottomWidth: StyleSheet.hairlineWidth,
+            alignItems: "center",
+            width: "100%",
           }}
-        />
+        >
+          <Text style={styles.foodTitle}>{supplement.productName}</Text>
+          <Text style={styles.foodCalorie}>{supplement.srvUse}</Text>
+          <View
+            style={{
+              width: "100%",
+              borderColor: "#E6E6E6",
+              borderWidth: 3,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              marginVertical: 10,
+            }}
+          />
+        </View>
         <View
           style={{
-            position: "absolute",
-            top: "50%",
+            padding: 5,
+            marginTop: 10,
+            width: "100%",
           }}
-        ></View>
+        >
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>섭취요일</Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              marginVertical: 20,
+              justifyContent: "space-evenly",
+            }}
+          >
+            <DayPicker
+              title={"일"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("일")}
+            />
+            <DayPicker
+              title={"월"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("월")}
+            />
+            <DayPicker
+              title={"화"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("화")}
+            />
+            <DayPicker
+              title={"수"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("수")}
+            />
+            <DayPicker
+              title={"목"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("목")}
+            />
+            <DayPicker
+              title={"금"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("금")}
+            />
+            <DayPicker
+              title={"토"}
+              selectedDays={selectedDays}
+              onPress={() => handleDayPress("토")}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            padding: 5,
+            marginVertical: 20,
+          }}
+        >
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>섭취 횟수</Text>
+          <NumericInput
+            value={count}
+            onChange={(value) => setCount(value)}
+            totalWidth={150}
+            minValue={0}
+            totalHeight={50}
+            iconSize={20}
+            rounded
+            separatorWidth={0}
+            containerStyle={{
+              backgroundColor: "#F8F8FA",
+              position: "absolute",
+              right: 0,
+              top: 0,
+              marginHorizontal: 10,
+            }}
+            iconStyle={{ color: "#000" }}
+            rightButtonBackgroundColor="#F8F8FA"
+            leftButtonBackgroundColor="#F8F8FA"
+            borderColor={"#E5E7EB"}
+          />
+        </View>
+        {renderDateTimePickers()}
+
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            padding: 5,
+            marginVertical: 20,
+          }}
+        >
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>
+            섭취량 ( x 포 / 정 )
+          </Text>
+          <NumericInput
+            value={quantity}
+            onChange={(value) => setQuantity(value)}
+            totalWidth={150}
+            minValue={0}
+            totalHeight={50}
+            iconSize={20}
+            rounded
+            separatorWidth={0}
+            containerStyle={{
+              backgroundColor: "#F8F8FA",
+              position: "absolute",
+              right: 0,
+              top: 0,
+              marginHorizontal: 10,
+            }}
+            iconStyle={{ color: "#000" }}
+            rightButtonBackgroundColor="#F8F8FA"
+            leftButtonBackgroundColor="#F8F8FA"
+            borderColor={"#E5E7EB"}
+          />
+        </View>
         <View style={styles.setButton}>
+          <View
+            style={{
+              width: "100%",
+              borderColor: "#E6E6E6",
+              borderWidth: 3,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              marginBottom: 5,
+            }}
+          />
+          <Pressable
+            style={{ margin: 15 }}
+            onPress={() =>
+              navigation.navigate("AddNutrientDetail", { supplement })
+            }
+          >
+            <Text style={{ textDecorationLine: "underline", color: "#666666" }}>
+              자세한 정보
+            </Text>
+          </Pressable>
           <Button
-            title={"저장하기"}
+            title={"루틴 저장하기"}
+            // onPress={() => saveRoutine()}
             onPress={() => navigation.navigate("Main", { screen: "Nutrient" })}
           />
         </View>
@@ -60,26 +285,27 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: "#F8F8FA",
     alignItems: "center",
+    padding: 20,
   },
   foodTitle: {
     fontWeight: "700",
     fontSize: 30,
-    position: "absolute",
-    top: "5%",
-    paddingLeft: 10,
-    paddingRight: 10,
+    marginHorizontal: 20,
+    marginBottom: 10,
+    marginVertical: 10,
   },
   foodCalorie: {
     color: "#999999",
-    fontSize: 15,
-    position: "absolute",
-    top: "15%",
+    fontSize: 18,
     paddingLeft: 20,
     paddingRight: 20,
+    marginBottom: 10,
+    marginVertical: 10,
   },
   setButton: {
     position: "absolute",
-    bottom: "5%",
+    bottom: "7%",
+    alignItems: "center",
   },
 });
 
