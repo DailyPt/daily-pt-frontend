@@ -9,8 +9,6 @@ const id = {
   ID: "",
 };
 
-// 검색 시작, 종료 날짜 설정 가능 (종료 날짜는 설정 안 하면 비워두는 걸로)
-
 export async function saveDietRecord(token, dietRecord) {
   try {
     const response = await axios.post(BACKEND_URL + id.DEFAULT, dietRecord, {

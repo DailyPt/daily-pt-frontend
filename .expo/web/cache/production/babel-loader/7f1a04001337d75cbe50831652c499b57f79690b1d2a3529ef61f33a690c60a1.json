@@ -1,0 +1,1 @@
+{"ast":null,"code":"import App from\"./src/App\";export default App;","map":{"version":3,"names":["App"],"sources":["/Users/jinwook/react-native/daily-pt-frontend/App.js"],"sourcesContent":["import App from './src/App';\n\nexport default App;\n"],"mappings":"AAAA,MAAO,CAAAA,GAAG,iBAEV,cAAe,CAAAA,GAAG"},"metadata":{},"sourceType":"module","externalDependencies":[]}

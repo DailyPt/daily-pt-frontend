@@ -24,8 +24,6 @@ const AddDietSettingScreen = () => {
     setSelectedDate(currentDate);
   };
 
-  console.log(selectedDate.toLocaleString());
-
   const [ratingValue, setRatingValue] = useState(0);
   const updateRating = (newRating) => {
     setRatingValue(newRating);

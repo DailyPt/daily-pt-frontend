@@ -35,6 +35,15 @@ const SettingInfoScreen = () => {
       try {
         const receivedInfo = await getUserInfo(authContext.token);
 
+        // const dateString = receivedInfo.birth;
+        // const parts = dateString.split("/");
+        // const year = parseInt(parts[0], 10);
+        // const month = parseInt(parts[1], 10) - 1; // Months in JavaScript are 0-based (0 - 11)
+        // const day = parseInt(parts[2], 10);
+
+        // const dateObject = new Date(year, month, day);
+
+        // setPrevUserBirth(dateObject);
         setPrevUserName(receivedInfo.name);
         setPrevUserHeight(receivedInfo.height.toString());
         setPrevUserWeight(receivedInfo.weight.toString());

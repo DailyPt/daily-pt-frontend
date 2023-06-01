@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Button from "../../components/Button";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -15,7 +15,6 @@ const AddNutrientSettingScreen = () => {
   const route = useRoute();
 
   const { supplement } = route.params;
-  console.log(supplement);
 
   const [selectedDays, setSelectedDays] = useState([]);
 
@@ -74,7 +73,6 @@ const AddNutrientSettingScreen = () => {
     return pickers;
   };
 
-  console.log(selectedTimes);
   const times = [];
   for (let i = 0; i < selectedTimes.length; i++) {
     const timeObject = selectedTimes[i];
@@ -89,7 +87,7 @@ const AddNutrientSettingScreen = () => {
   const nutrientRoutine = {
     days: selectedDays, // array
     count: count,
-    times: times, // array
+    times: times,
     quantity: quantity,
   };
 
@@ -126,125 +124,133 @@ const AddNutrientSettingScreen = () => {
             }}
           />
         </View>
-        <View
+        <ScrollView
           style={{
-            padding: 5,
-            marginTop: 10,
-            width: "100%",
+            position: "absolute",
+            top: "20%",
+            height: "60%",
           }}
         >
-          <Text style={{ fontWeight: "700", fontSize: 20 }}>섭취요일</Text>
+          <View
+            style={{
+              padding: 5,
+              marginTop: 10,
+              width: "100%",
+            }}
+          >
+            <Text style={{ fontWeight: "700", fontSize: 20 }}>섭취요일</Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                marginVertical: 20,
+                justifyContent: "space-evenly",
+              }}
+            >
+              <DayPicker
+                title={"일"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("일")}
+              />
+              <DayPicker
+                title={"월"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("월")}
+              />
+              <DayPicker
+                title={"화"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("화")}
+              />
+              <DayPicker
+                title={"수"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("수")}
+              />
+              <DayPicker
+                title={"목"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("목")}
+              />
+              <DayPicker
+                title={"금"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("금")}
+              />
+              <DayPicker
+                title={"토"}
+                selectedDays={selectedDays}
+                onPress={() => handleDayPress("토")}
+              />
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              padding: 5,
+              marginVertical: 20,
+            }}
+          >
+            <Text style={{ fontWeight: "700", fontSize: 20 }}>섭취 횟수</Text>
+            <NumericInput
+              value={count}
+              onChange={(value) => setCount(value)}
+              totalWidth={150}
+              minValue={0}
+              totalHeight={50}
+              iconSize={20}
+              rounded
+              separatorWidth={0}
+              containerStyle={{
+                backgroundColor: "#F8F8FA",
+                position: "absolute",
+                right: 0,
+                top: 0,
+                marginHorizontal: 10,
+              }}
+              iconStyle={{ color: "#000" }}
+              rightButtonBackgroundColor="#F8F8FA"
+              leftButtonBackgroundColor="#F8F8FA"
+              borderColor={"#E5E7EB"}
+            />
+          </View>
+          {renderDateTimePickers()}
 
           <View
             style={{
               flexDirection: "row",
+              width: "100%",
+              padding: 5,
               marginVertical: 20,
-              justifyContent: "space-evenly",
             }}
           >
-            <DayPicker
-              title={"일"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("일")}
-            />
-            <DayPicker
-              title={"월"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("월")}
-            />
-            <DayPicker
-              title={"화"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("화")}
-            />
-            <DayPicker
-              title={"수"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("수")}
-            />
-            <DayPicker
-              title={"목"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("목")}
-            />
-            <DayPicker
-              title={"금"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("금")}
-            />
-            <DayPicker
-              title={"토"}
-              selectedDays={selectedDays}
-              onPress={() => handleDayPress("토")}
+            <Text style={{ fontWeight: "700", fontSize: 20 }}>
+              섭취량 ( x 포 / 정 )
+            </Text>
+            <NumericInput
+              value={quantity}
+              onChange={(value) => setQuantity(value)}
+              totalWidth={150}
+              minValue={0}
+              totalHeight={50}
+              iconSize={20}
+              rounded
+              separatorWidth={0}
+              containerStyle={{
+                backgroundColor: "#F8F8FA",
+                position: "absolute",
+                right: 0,
+                top: 0,
+                marginHorizontal: 10,
+              }}
+              iconStyle={{ color: "#000" }}
+              rightButtonBackgroundColor="#F8F8FA"
+              leftButtonBackgroundColor="#F8F8FA"
+              borderColor={"#E5E7EB"}
             />
           </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            padding: 5,
-            marginVertical: 20,
-          }}
-        >
-          <Text style={{ fontWeight: "700", fontSize: 20 }}>섭취 횟수</Text>
-          <NumericInput
-            value={count}
-            onChange={(value) => setCount(value)}
-            totalWidth={150}
-            minValue={0}
-            totalHeight={50}
-            iconSize={20}
-            rounded
-            separatorWidth={0}
-            containerStyle={{
-              backgroundColor: "#F8F8FA",
-              position: "absolute",
-              right: 0,
-              top: 0,
-              marginHorizontal: 10,
-            }}
-            iconStyle={{ color: "#000" }}
-            rightButtonBackgroundColor="#F8F8FA"
-            leftButtonBackgroundColor="#F8F8FA"
-            borderColor={"#E5E7EB"}
-          />
-        </View>
-        {renderDateTimePickers()}
-
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            padding: 5,
-            marginVertical: 20,
-          }}
-        >
-          <Text style={{ fontWeight: "700", fontSize: 20 }}>
-            섭취량 ( x 포 / 정 )
-          </Text>
-          <NumericInput
-            value={quantity}
-            onChange={(value) => setQuantity(value)}
-            totalWidth={150}
-            minValue={0}
-            totalHeight={50}
-            iconSize={20}
-            rounded
-            separatorWidth={0}
-            containerStyle={{
-              backgroundColor: "#F8F8FA",
-              position: "absolute",
-              right: 0,
-              top: 0,
-              marginHorizontal: 10,
-            }}
-            iconStyle={{ color: "#000" }}
-            rightButtonBackgroundColor="#F8F8FA"
-            leftButtonBackgroundColor="#F8F8FA"
-            borderColor={"#E5E7EB"}
-          />
-        </View>
+        </ScrollView>
         <View style={styles.setButton}>
           <View
             style={{
@@ -312,8 +318,11 @@ const styles = StyleSheet.create({
   },
   setButton: {
     position: "absolute",
-    bottom: "7%",
+    width: "100%",
+    height: "20%",
+    bottom: "1%",
     alignItems: "center",
+    backgroundColor: "#F8F8FA",
   },
 });
 

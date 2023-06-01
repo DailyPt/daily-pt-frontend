@@ -1,17 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import Navigation from './navigation/Navigation';
-import 'moment';
-import 'moment/locale/ko';
-import AuthContextProvider, { AuthContext } from './store/auth-context';
-import { useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from "expo-status-bar";
+import Navigation from "./navigation/Navigation";
+import "moment";
+import "moment/locale/ko";
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
+import { useContext, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    };
+  },
+});
 
 function Root() {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem('token');
+      const storedToken = await AsyncStorage.getItem("token");
 
       if (storedToken) {
         authContext.authenticate(storedToken);
