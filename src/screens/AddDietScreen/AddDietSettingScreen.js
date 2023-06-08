@@ -47,7 +47,9 @@ const AddDietSettingScreen = () => {
     quantity: quantity,
     memo: memo,
     rating: ratingValue,
-    date: selectedDate.toLocaleString(),
+    date: selectedDate.toLocaleString("ko-KR", {
+      hour12: false,
+    }),
   };
 
   return (

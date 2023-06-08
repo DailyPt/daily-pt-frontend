@@ -5,29 +5,20 @@ import { useEffect } from "react";
 const AddDietAnalyzeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { image, uri } = route.params;
 
-  console.log(image);
-  console.log(uri);
+  const { analysisResult } = route.params;
 
-  // image uri --> form data --> post
-
-  // formData.append('image', {
-  //   uri: imageUri,
-  //   name: 'photo.jpg',
-  //   type: 'image/jpeg',
-  // });
-
-  // 백엔드 연동 후에는 분석 결과를 받으면 넘어가는 걸로... 지금은 임시로 5초 timeout
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.navigate("AddDietResult", { image: image, uri: uri });
-    }, 1000);
+    const analysisTimeout = setTimeout(() => {
+      navigation.navigate("AddDietResult", {
+        analysisResult: analysisResult,
+      });
+    }, 3000);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(analysisTimeout);
     };
-  }, []);
+  }, [navigation, analysisResult]);
 
   return (
     <View style={styles.container}>

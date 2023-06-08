@@ -10,13 +10,17 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker"; // 배포 시 react-native-image-picker로 변환
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Platform } from "react-native";
+import { requestAnalyze } from "../../api/image";
+import { AuthContext } from "../../store/auth-context";
+
+//import { Platform } from "react-native";
 
 const AddDietImageScreen = () => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
     requestCameraPermission();
@@ -48,11 +52,33 @@ const AddDietImageScreen = () => {
     if (!result.canceled && result.assets.length > 0) {
       const selectedImageUri = result.assets[0].uri;
       const fileName = getFileName(selectedImageUri);
-      console.log(fileName);
-      setImage(fileName);
+      console.log("filename : ", fileName);
+
+      const response = await fetch(selectedImageUri);
+      const blob = await response.blob();
+      console.log("blob: ", JSON.stringify(blob));
+
+      const formData = new FormData();
+      formData.append("photo", {
+        uri: result.assets[0].uri,
+        type: result.assets[0].type,
+        name: result.assets[0].fileName,
+      });
+      formData.append("foodId", "1");
+      formData.append("memo", "메모");
+      formData.append("rating", "5");
+      formData.append("date", "2023/05/30 12:02:00");
+
+      console.log("formData: ", JSON.stringify(formData));
+
+      const analysisResult = await requestAnalyze(formData);
+
+      console.log("Analysis result:", analysisResult);
+
       navigation.navigate("AddDietAnalyze", {
         image: fileName,
         uri: selectedImageUri,
+        analysisResult: analysisResult,
       });
     }
   };
@@ -60,13 +86,37 @@ const AddDietImageScreen = () => {
   const handleChooseFromGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.canceled && result.assets.length > 0) {
+      const assets = result.assets[0];
+      console.log(assets);
       const selectedImageUri = result.assets[0].uri;
       const fileName = getFileName(selectedImageUri);
       console.log(fileName);
-      setImage(fileName);
+
+      const response = await fetch(selectedImageUri);
+      const blob = await response.blob();
+      console.log("blob: ", JSON.stringify(blob));
+
+      const formData = new FormData();
+      formData.append("photo", {
+        uri: result.assets[0].uri,
+        type: result.assets[0].type,
+        name: result.assets[0].fileName,
+      });
+      formData.append("foodId", "1");
+      formData.append("memo", "메모");
+      formData.append("rating", "5");
+      formData.append("date", "2023/05/30 12:02:00");
+
+      console.log("formData: ", JSON.stringify(formData));
+
+      const analysisResult = await requestAnalyze(formData);
+
+      console.log("Analysis result:", analysisResult);
+
       navigation.navigate("AddDietAnalyze", {
         image: fileName,
         uri: selectedImageUri,
+        analysisResult: analysisResult,
       });
     }
   };
