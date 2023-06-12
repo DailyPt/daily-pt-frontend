@@ -53,12 +53,13 @@ const AddDietSettingScreen = () => {
   }
   dietRecord.append("rating", String(ratingValue));
   dietRecord.append("quantity", String(quantity));
-  dietRecord.append(
-    "date",
-    selectedDate.toLocaleString("ko-KR", {
-      hour12: false,
-    })
-  );
+
+  const options = {
+    timeZone: "Asia/Seoul",
+    hour12: false,
+  };
+
+  dietRecord.append("date", selectedDate.toLocaleString("en-US", options));
 
   return (
     <View style={styles.container}>
