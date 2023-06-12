@@ -5,7 +5,8 @@ import SummaryButton, {
   SUBTITLE,
   IMAGE,
 } from "../../components/SummaryButton";
-import ProgressBar from "react-native-progress/Bar";
+// import { LinearProgress } from "react-native-elements";
+import * as Progress from "react-native-progress";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../store/auth-context";
@@ -90,10 +91,10 @@ const DietSummaryScreen = ({ title }) => {
     }
   }
 
-  const progressKcal = kcal / userBmr;
-  const progressCarbo = carbohydrate / (userBmr * 0.65);
-  const progressProtein = protein / (userBmr * 0.15);
-  const progressFat = fat / (userBmr * 0.2);
+  const progressKcal = (kcal / userBmr) * 100;
+  const progressCarbo = (carbohydrate / (userBmr * 0.65)) * 100;
+  const progressProtein = (protein / (userBmr * 0.15)) * 100;
+  const progressFat = (fat / (userBmr * 0.2)) * 100;
 
   return (
     <View style={styles.container}>
@@ -123,20 +124,21 @@ const DietSummaryScreen = ({ title }) => {
                 </View>
                 <View
                   style={{
-                    flex: 1,
-                    position: "relative",
-                    width: Dimensions.get("window").width * 0.44,
+                    width: "37%",
                     justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: 7,
                   }}
                 >
-                  {/* <ProgressBar
-                    progress={progressKcal}
-                    width={100}
-                    height={15}
-                    borderRadius={8}
-                    unfilledColor={"#E6E6E6"}
-                    color={"#AD94F7"}
-                  /> */}
+                  <View style={styles.progressBar}>
+                    <View
+                      style={{
+                        backgroundColor: "#AD94F7",
+                        width: `${progressKcal}%`,
+                        flex: 1,
+                      }}
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -163,20 +165,21 @@ const DietSummaryScreen = ({ title }) => {
               </View>
               <View
                 style={{
-                  flex: 1,
-                  position: "relative",
-                  width: Dimensions.get("window").width * 0.44,
+                  width: "37%",
                   justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: 7,
                 }}
               >
-                {/* <Progress.Bar
-                  progress={progressCarbo}
-                  width={100}
-                  height={15}
-                  borderRadius={8}
-                  unfilledColor={"#E6E6E6"}
-                  color={"#AD94F7"}
-                /> */}
+                <View style={styles.progressBar}>
+                  <View
+                    style={{
+                      backgroundColor: "#AD94F7",
+                      width: `${progressCarbo}%`,
+                      flex: 1,
+                    }}
+                  />
+                </View>
               </View>
             </View>
             <View>
@@ -198,20 +201,21 @@ const DietSummaryScreen = ({ title }) => {
                 </View>
                 <View
                   style={{
-                    flex: 1,
-                    position: "relative",
-                    width: Dimensions.get("window").width * 0.44,
+                    width: "37%",
                     justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: 7,
                   }}
                 >
-                  {/* <Progress.Bar
-                    progress={progressProtein}
-                    width={100}
-                    height={15}
-                    borderRadius={8}
-                    unfilledColor={"#E6E6E6"}
-                    color={"#AD94F7"}
-                  /> */}
+                  <View style={styles.progressBar}>
+                    <View
+                      style={{
+                        backgroundColor: "#AD94F7",
+                        width: `${progressProtein}%`,
+                        flex: 1,
+                      }}
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -232,20 +236,21 @@ const DietSummaryScreen = ({ title }) => {
                 </View>
                 <View
                   style={{
-                    flex: 1,
-                    position: "relative",
-                    width: Dimensions.get("window").width * 0.44,
+                    width: "37%",
                     justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: 7,
                   }}
                 >
-                  {/* <Progress.Bar
-                    progress={progressFat}
-                    width={100}
-                    height={15}
-                    borderRadius={8}
-                    unfilledColor={"#E6E6E6"}
-                    color={"#AD94F7"}
-                  /> */}
+                  <View style={styles.progressBar}>
+                    <View
+                      style={{
+                        backgroundColor: "#AD94F7",
+                        width: `${progressFat}%`,
+                        flex: 1,
+                      }}
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -320,6 +325,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "12%",
     left: "10%",
+  },
+  progressBar: {
+    height: 15,
+    width: "100%",
+    backgroundColor: "#E6E6E6",
+    borderColor: "#AD94F7",
+    borderWidth: 2,
+    borderRadius: 8,
   },
 });
 

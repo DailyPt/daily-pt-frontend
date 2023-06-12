@@ -42,12 +42,12 @@ const DietDaySelectScreen = () => {
         <Text
           style={{
             fontWeight: "700",
-            fontSize: 30,
+            fontSize: 25,
             marginLeft: 10,
             marginVertical: 20,
           }}
         >
-          날짜 선택
+          조회하실 날짜를 선택하세요!
         </Text>
         <Text
           style={{
