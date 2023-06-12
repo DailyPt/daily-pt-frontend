@@ -21,8 +21,9 @@ const AddDietDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { food } = route.params;
+  const { image, food } = route.params;
   console.log(food);
+  console.log(image);
 
   return (
     <View style={styles.container}>
@@ -165,7 +166,9 @@ const AddDietDetailScreen = () => {
         <View>
           <Button
             title={"돌아가기"}
-            onPress={() => navigation.navigate("AddDietSetting", { food })}
+            onPress={() =>
+              navigation.navigate("AddDietSetting", { image, food })
+            }
           />
         </View>
       </View>

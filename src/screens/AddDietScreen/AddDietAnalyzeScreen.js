@@ -6,11 +6,13 @@ const AddDietAnalyzeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { analysisResult } = route.params;
+  const { image, uri, analysisResult } = route.params;
 
   useEffect(() => {
     const analysisTimeout = setTimeout(() => {
       navigation.navigate("AddDietResult", {
+        image: image,
+        uri: uri,
         analysisResult: analysisResult,
       });
     }, 3000);

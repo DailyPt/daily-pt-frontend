@@ -13,14 +13,14 @@ export async function saveDietRecord(token, dietRecord) {
   try {
     const response = await axios.post(BACKEND_URL + id.DEFAULT, dietRecord, {
       headers: {
-        "Content-Type": `application/json`,
+        "Content-Type": `multipart/form-data`,
         authorization: `Bearer ${token}`,
       },
       withCredentials: true,
     });
-    console.log("Post request successful:", response.data.message);
+    console.log("Post request successful:", response.data);
 
-    return response.data.data;
+    return response.data.status;
   } catch (error) {
     console.log("Save Diet Record Error: ", error);
   }

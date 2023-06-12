@@ -5,6 +5,7 @@ import {
   Dimensions,
   Image,
   Text,
+  Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Button from "../../components/Button";
@@ -25,8 +26,16 @@ const AddDietRecordScreen = () => {
 
   const saveRecord = async () => {
     try {
-      await saveDietRecord(authContext.token, dietRecord);
-      navigation.navigate("Main", { screen: "Diet" });
+      const result = await saveDietRecord(authContext.token, dietRecord);
+      if (result === 200) {
+        Alert.alert("저장 완료", "식단 기록이 생성되었습니다!");
+        navigation.navigate("Main", { screen: "Diet" });
+      } else {
+        Alert.alert(
+          "저장 실패",
+          "식단 기록이 저장되지 않았습니다. 다시 시도해보세요!"
+        );
+      }
     } catch (error) {
       console.log("Error saving diet record:", error);
     }
@@ -36,7 +45,7 @@ const AddDietRecordScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Pressable
-          onPress={() => navigation.navigate("AddDietSetting", { food })}
+          onPress={() => navigation.navigate("AddDietSetting", { food, image })}
           hitSlop={10}
           position={"absolute"}
           left={"5%"}
@@ -57,8 +66,8 @@ const AddDietRecordScreen = () => {
         <View style={styles.recordButton}>
           <Button
             title={"저장하기"}
-            // onPress={() => saveRecord()}
-            onPress={() => navigation.navigate("Main", { screen: "Diet" })}
+            onPress={() => saveRecord()}
+            // onPress={() => navigation.navigate("Main", { screen: "Diet" })}
           />
         </View>
       </View>

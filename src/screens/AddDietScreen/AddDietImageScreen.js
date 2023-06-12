@@ -54,19 +54,19 @@ const AddDietImageScreen = () => {
       const fileName = getFileName(selectedImageUri);
       console.log("filename : ", fileName);
 
-      const response = await fetch(selectedImageUri);
-      const blob = await response.blob();
-      console.log("blob: ", JSON.stringify(blob));
-
-      const formData = new FormData();
-      formData.append("photo", {
+      const photo = {
         uri: result.assets[0].uri,
         type: result.assets[0].type,
-        name: result.assets[0].fileName,
-      });
+        name: fileName,
+      };
+
+      const formData = new FormData();
+      formData.append("photo", photo);
+      // will be erased
       formData.append("foodId", "1");
       formData.append("memo", "메모");
       formData.append("rating", "5");
+      formData.append("quantity", 2);
       formData.append("date", "2023/05/30 12:02:00");
 
       console.log("formData: ", JSON.stringify(formData));
@@ -76,7 +76,7 @@ const AddDietImageScreen = () => {
       console.log("Analysis result:", analysisResult);
 
       navigation.navigate("AddDietAnalyze", {
-        image: fileName,
+        image: photo,
         uri: selectedImageUri,
         analysisResult: analysisResult,
       });
@@ -89,22 +89,20 @@ const AddDietImageScreen = () => {
       const assets = result.assets[0];
       console.log(assets);
       const selectedImageUri = result.assets[0].uri;
-      const fileName = getFileName(selectedImageUri);
-      console.log(fileName);
 
-      const response = await fetch(selectedImageUri);
-      const blob = await response.blob();
-      console.log("blob: ", JSON.stringify(blob));
-
-      const formData = new FormData();
-      formData.append("photo", {
+      const photo = {
         uri: result.assets[0].uri,
         type: result.assets[0].type,
         name: result.assets[0].fileName,
-      });
+      };
+
+      const formData = new FormData();
+      formData.append("photo", photo);
+      // will be erased
       formData.append("foodId", "1");
       formData.append("memo", "메모");
       formData.append("rating", "5");
+      formData.append("quantity", 2);
       formData.append("date", "2023/05/30 12:02:00");
 
       console.log("formData: ", JSON.stringify(formData));
@@ -114,7 +112,7 @@ const AddDietImageScreen = () => {
       console.log("Analysis result:", analysisResult);
 
       navigation.navigate("AddDietAnalyze", {
-        image: fileName,
+        image: photo,
         uri: selectedImageUri,
         analysisResult: analysisResult,
       });

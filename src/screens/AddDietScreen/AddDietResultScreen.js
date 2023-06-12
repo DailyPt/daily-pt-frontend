@@ -16,9 +16,9 @@ import Button from "../../components/Button";
 const AddDietResultScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { image, uri } = route.params;
+  const { image, uri, analysisResult } = route.params;
 
-  console.log(image);
+  console.log(analysisResult);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,7 +55,12 @@ const AddDietResultScreen = () => {
             <Button
               title={"기록하기"}
               // 음식, 영양소 정보와 함께 navigate
-              onPress={() => navigation.navigate("AddDietSetting")}
+              onPress={() =>
+                navigation.navigate("AddDietSetting", {
+                  image: image,
+                  //food: analysisResult
+                })
+              }
             />
           </View>
 
@@ -69,7 +74,9 @@ const AddDietResultScreen = () => {
               }}
               size={20}
               onPress={() =>
-                navigation.navigate("AddDietTextSearch", { uri: uri })
+                navigation.navigate("AddDietTextSearch", {
+                  image: image,
+                })
               }
             />
           </View>

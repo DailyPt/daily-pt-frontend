@@ -16,7 +16,9 @@ const AddDietSettingScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { food } = route.params;
+  const { image, food } = route.params;
+
+  console.log(image);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const handleDateChange = (event, newDate) => {
@@ -41,16 +43,22 @@ const AddDietSettingScreen = () => {
     }
   }
 
-  const dietRecord = {
-    // photo: ,
-    foodId: food.id,
-    quantity: quantity,
-    memo: memo,
-    rating: ratingValue,
-    date: selectedDate.toLocaleString("ko-KR", {
+  const dietRecord = new FormData();
+  dietRecord.append("photo", image);
+  dietRecord.append("foodId", String(food.id));
+  if (memo !== "") {
+    dietRecord.append("memo", memo);
+  } else {
+    dietRecord.append("memo", " ");
+  }
+  dietRecord.append("rating", String(ratingValue));
+  dietRecord.append("quantity", String(quantity));
+  dietRecord.append(
+    "date",
+    selectedDate.toLocaleString("ko-KR", {
       hour12: false,
-    }),
-  };
+    })
+  );
 
   return (
     <View style={styles.container}>
@@ -247,7 +255,9 @@ const AddDietSettingScreen = () => {
           />
           <Pressable
             style={{ margin: 15 }}
-            onPress={() => navigation.navigate("AddDietDetail", { food })}
+            onPress={() =>
+              navigation.navigate("AddDietDetail", { image, food })
+            }
           >
             <Text style={{ textDecorationLine: "underline", color: "#666666" }}>
               자세한 영양정보
@@ -256,7 +266,10 @@ const AddDietSettingScreen = () => {
           <Button
             title={"수정하기"}
             onPress={() =>
-              navigation.navigate("AddDietRecord", { food, dietRecord })
+              navigation.navigate("AddDietRecord", {
+                food,
+                dietRecord,
+              })
             }
           />
         </View>

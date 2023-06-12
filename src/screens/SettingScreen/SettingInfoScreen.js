@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, Dimensions, Text } from "react-native";
+import { View, Image, StyleSheet, Dimensions, Text, Alert } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { useState, useContext, useEffect } from "react";
 import { getUserInfo, modifyUserInfo } from "../../api/userInfo";
@@ -19,7 +19,7 @@ const SettingInfoScreen = () => {
 
   const [prevUserName, setPrevUserName] = useState();
   const [userName, setUserName] = useState();
-  // const [prevUserBirth, setPrevUserBirth] = useState();
+  const [prevUserBirth, setPrevUserBirth] = useState();
   const [userBirth, setUserBirth] = useState();
   const [prevUserHeight, setPrevUserHeight] = useState();
   const [userHeight, setUserHeight] = useState();
@@ -28,22 +28,12 @@ const SettingInfoScreen = () => {
   const [prevUserGender, setPrevUserGender] = useState();
   const [userGender, setUserGender] = useState();
 
-  const prevUserBirth = "1999/02/25";
-
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const receivedInfo = await getUserInfo(authContext.token);
 
-        // const dateString = receivedInfo.birth;
-        // const parts = dateString.split("/");
-        // const year = parseInt(parts[0], 10);
-        // const month = parseInt(parts[1], 10) - 1; // Months in JavaScript are 0-based (0 - 11)
-        // const day = parseInt(parts[2], 10);
-
-        // const dateObject = new Date(year, month, day);
-
-        // setPrevUserBirth(dateObject);
+        setPrevUserBirth(receivedInfo.birth);
         setPrevUserName(receivedInfo.name);
         setPrevUserHeight(receivedInfo.height.toString());
         setPrevUserWeight(receivedInfo.weight.toString());
@@ -74,6 +64,8 @@ const SettingInfoScreen = () => {
       console.log(newUserInfo);
 
       await modifyUserInfo(authContext.token, newUserInfo);
+
+      Alert.alert("수정 완료", "내 정보를 수정하였습니다!");
     }
     navigation.navigate("Main");
   };

@@ -18,7 +18,9 @@ import { getFoodList } from "../../api/food";
 const AddDietTextSearchScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { uri } = route.params;
+  const { image } = route.params;
+
+  console.log(image);
 
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -40,7 +42,7 @@ const AddDietTextSearchScreen = () => {
   };
 
   const onPress = (food) => {
-    navigation.navigate("AddDietSetting", { food });
+    navigation.navigate("AddDietSetting", { image: image, food });
   };
 
   return (
@@ -48,7 +50,7 @@ const AddDietTextSearchScreen = () => {
       <View style={styles.header}>
         <View style={styles.container}></View>
         <Pressable
-          onPress={() => navigation.navigate("AddDietResult", { uri: uri })}
+          onPress={() => navigation.navigate("AddDietResult", { image: image })}
           hitSlop={10}
           position={"absolute"}
           left={"5%"}
