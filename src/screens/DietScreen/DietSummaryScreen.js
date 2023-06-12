@@ -25,7 +25,7 @@ const DietSummaryScreen = ({ title }) => {
     "-" +
     (dt.getMonth() + 1).toString().padStart(2, "0") +
     "-" +
-    (dt.getDate() - 1) +
+    (dt.getDate() - 1).toString().padStart(2, "0") +
     "T15:00:00.000Z";
 
   const end =
@@ -33,7 +33,7 @@ const DietSummaryScreen = ({ title }) => {
     "-" +
     (dt.getMonth() + 1).toString().padStart(2, "0") +
     "-" +
-    dt.getDate() +
+    dt.getDate().toString().padStart(2, "0") +
     "T15:00:00.000Z";
 
   console.log(start);

@@ -65,11 +65,7 @@ const AddDietRecordScreen = () => {
           source={require("../../../assets/AddDietRecord.png")}
         />
         <View style={styles.recordButton}>
-          <Button
-            title={"저장하기"}
-            onPress={() => saveRecord()}
-            // onPress={() => navigation.navigate("Main", { screen: "Diet" })}
-          />
+          <Button title={"저장하기"} onPress={() => saveRecord()} />
         </View>
       </View>
     </View>

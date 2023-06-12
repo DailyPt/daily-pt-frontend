@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 
@@ -9,6 +9,12 @@ const AddDietAnalyzeScreen = () => {
   const { image, uri, analysisResult } = route.params;
 
   useEffect(() => {
+    if (typeof analysisResult === "undefined") {
+      Alert.alert("실패", "사진 인식에 실패했습니다.");
+      navigation.goBack();
+      return;
+    }
+
     const analysisTimeout = setTimeout(() => {
       navigation.navigate("AddDietResult", {
         image: image,
@@ -24,7 +30,7 @@ const AddDietAnalyzeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AI 식단 분석 중</Text>
+      <Text style={styles.title}>AI 식단 분석 중...</Text>
       <Text style={[styles.subtitle, { position: "absolute", top: "20%" }]}>
         아주 잠시만 조금만 기다려주세요!
       </Text>

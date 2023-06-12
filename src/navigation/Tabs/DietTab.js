@@ -4,6 +4,9 @@ import { Image, Pressable } from "react-native";
 import DailyDietSummaryScreen from "../../screens/DietScreen/DailyDietSummaryScreen";
 import DailyDietDetailScreen from "../../screens/DietScreen/DailyDietDetailScreen";
 import DietDaySelectScreen from "../../screens/DietScreen/DietDaySelectScreen";
+import DietDetailScreen from "../../screens/DietScreen/DietDetailScreen";
+import DietDetailInfoScreen from "../../screens/DietScreen/DietDetailInfoScreen";
+import DietTrashCanScreen from "../../screens/DietScreen/DietTrashCanScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
@@ -109,6 +112,44 @@ const DietTab = () => {
                   name="trash-can"
                   size={24}
                   color={"#fff"}
+                  onPress={() => {
+                    navigation.navigate("DietTrashCan");
+                  }}
+                />
+              </Pressable>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DietDetail"
+        component={DietDetailScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DietDetailInfo"
+        component={DietDetailInfoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DietTrashCan"
+        component={DietTrashCanScreen}
+        options={{
+          headerLeft: ({ canGoBack }) => {
+            if (!canGoBack) {
+              return null;
+            }
+
+            return (
+              <Pressable onPress={navigation.goBack} hitSlop={10}>
+                <MaterialCommunityIcons
+                  name="chevron-left"
+                  size={24}
+                  color="#fff"
                 />
               </Pressable>
             );

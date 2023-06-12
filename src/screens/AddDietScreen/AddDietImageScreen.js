@@ -12,15 +12,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker"; // 배포 시 react-native-image-picker로 변환
 import { useEffect, useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { requestAnalyze } from "../../api/image";
+import { requestAnalysis } from "../../api/dietRecord";
 import { AuthContext } from "../../store/auth-context";
-
-//import { Platform } from "react-native";
 
 const AddDietImageScreen = () => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const authContext = useContext(AuthContext);
+  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     requestCameraPermission();
@@ -60,17 +59,14 @@ const AddDietImageScreen = () => {
         name: fileName,
       };
 
+      setPhoto(photo);
+
       const formData = new FormData();
       formData.append("photo", photo);
-      formData.append("foodId", "1");
-      formData.append("memo", "메모");
-      formData.append("rating", "5");
-      formData.append("quantity", 2);
-      formData.append("date", "2023/05/30 12:02:00");
 
       console.log("formData: ", JSON.stringify(formData));
 
-      const analysisResult = await requestAnalyze(formData);
+      const analysisResult = await requestAnalysis(formData);
 
       console.log("Analysis result:", analysisResult);
 
@@ -97,16 +93,10 @@ const AddDietImageScreen = () => {
 
       const formData = new FormData();
       formData.append("photo", photo);
-      // will be erased
-      formData.append("foodId", "1");
-      formData.append("memo", "메모");
-      formData.append("rating", "5");
-      formData.append("quantity", 2);
-      formData.append("date", "2023/05/30 12:02:00");
 
       console.log("formData: ", JSON.stringify(formData));
 
-      const analysisResult = await requestAnalyze(formData);
+      const analysisResult = await requestAnalysis(authContext.token, formData);
 
       console.log("Analysis result:", analysisResult);
 

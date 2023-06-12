@@ -18,7 +18,7 @@ const AddDietResultScreen = () => {
   const route = useRoute();
   const { image, uri, analysisResult } = route.params;
 
-  console.log(analysisResult);
+  console.log(analysisResult.data[0]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,7 +45,9 @@ const AddDietResultScreen = () => {
 
       <ScrollView style={styles.result}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.resultTitle}>든든한 한끼를 드셨군요!</Text>
+          <Text style={styles.resultTitle}>
+            {analysisResult.data[0].descKor}를 드셨군요!
+          </Text>
           <Text style={[styles.resultSubtitle]}>
             AI가 제대로 분석했는지 확인해주세요.
           </Text>
@@ -58,7 +60,7 @@ const AddDietResultScreen = () => {
               onPress={() =>
                 navigation.navigate("AddDietSetting", {
                   image: image,
-                  //food: analysisResult
+                  food: analysisResult.data[0],
                 })
               }
             />
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
   },
   recordButton: {
     position: "absolute",
-    top: Dimensions.get("window").height * 0.5,
+    top: Dimensions.get("window").height * 0.52,
   },
   search: {
     flexDirection: "row",

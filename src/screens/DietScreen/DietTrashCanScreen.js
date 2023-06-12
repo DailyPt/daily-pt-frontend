@@ -17,36 +17,32 @@ import {
   useRoute,
   useFocusEffect,
 } from "@react-navigation/native";
-import { getDietRecord, deleteDietRecord } from "../../api/dietRecord";
+import { getTrashCan, restoreDietRecord } from "../../api/dietRecord";
 
-const fetchRecord = async (token, start, end, setDietRecord) => {
+const fetchRecord = async (token, setTrashCan) => {
   try {
-    const receivedInfo = await getDietRecord(token, start, end);
-    setDietRecord(receivedInfo);
+    const receivedInfo = await getTrashCan(token);
+    setTrashCan(receivedInfo);
   } catch (error) {
     console.error("Error fetching dietRecord:", error);
   }
 };
 
-const DailyDietDetailScreen = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { start, end } = route.params;
-
+const DietTrashCanScreen = () => {
   const authContext = useContext(AuthContext);
-  const [dietRecord, setDietRecord] = useState([]);
+  const [trashCan, setTrashCan] = useState([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
 
-  const deleteRecord = async (id) => {
+  const restoreRecord = async (id) => {
     try {
       Alert.alert(
-        "식단 삭제",
-        "정말로 삭제하시겠습니까?",
+        "식단 복원",
+        "식단을 복원하시겠습니까?",
         [
           {
             text: "확인",
             onPress: async () => {
-              await deleteDietRecord(authContext.token, id);
+              await restoreDietRecord(authContext.token, id);
               setRefreshFlag((prevState) => !prevState);
             },
           },
@@ -60,16 +56,16 @@ const DailyDietDetailScreen = () => {
 
       setRefreshFlag((prevState) => !prevState);
     } catch (error) {
-      console.error("Error deleting dietRecord:", error);
+      console.error("Error restoring dietRecord:", error);
     }
   };
 
   useEffect(() => {
-    fetchRecord(authContext.token, start, end, setDietRecord);
+    fetchRecord(authContext.token, setTrashCan);
   }, [authContext.token, refreshFlag]);
 
   useFocusEffect(() => {
-    fetchRecord(authContext.token, start, end, setDietRecord);
+    fetchRecord(authContext.token, setTrashCan);
   });
 
   return (
@@ -81,8 +77,8 @@ const DailyDietDetailScreen = () => {
     >
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.detailContainer} scrollEnabled={true}>
-          {dietRecord &&
-            dietRecord.map((record, index) => (
+          {trashCan &&
+            trashCan.map((record, index) => (
               <Pressable key={index} style={styles.detail}>
                 <View
                   style={{
@@ -157,24 +153,11 @@ const DailyDietDetailScreen = () => {
                   }}
                 >
                   <Pressable
-                    style={styles.buttonModify}
+                    style={styles.buttonRestore}
                     hitSlop={10}
-                    onPress={() =>
-                      navigation.navigate("DietDetail", {
-                        id: record.id,
-                        start: start,
-                        end: end,
-                      })
-                    }
+                    onPress={() => restoreRecord(record.id)}
                   >
-                    <Text style={styles.buttonTextModify}>수정</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.buttonDelete}
-                    hitSlop={10}
-                    onPress={() => deleteRecord(record.id)}
-                  >
-                    <Text style={styles.buttonTextDelete}>삭제</Text>
+                    <Text style={styles.buttonTextRestore}>복원</Text>
                   </Pressable>
                 </View>
               </Pressable>
@@ -221,13 +204,13 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     marginBottom: 20,
   },
-  buttonModify: {
+  buttonRestore: {
     width: Dimensions.get("window").width * 0.2,
     height: Dimensions.get("window").height * 0.05,
     borderRadius: 30,
     position: "absolute",
     top: 20,
-    right: 80,
+    right: 0,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
@@ -235,30 +218,11 @@ const styles = StyleSheet.create({
     borderColor: "#AD94F7",
     borderWidth: 1,
   },
-  buttonTextModify: {
+  buttonTextRestore: {
     color: "#AD94F7",
-    fontWeight: "700",
-    fontSize: 18,
-  },
-  buttonDelete: {
-    width: Dimensions.get("window").width * 0.2,
-    height: Dimensions.get("window").height * 0.05,
-    position: "absolute",
-    right: 0,
-    top: 20,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    marginHorizontal: 10,
-    borderColor: "#FF0000",
-    borderWidth: 1,
-  },
-  buttonTextDelete: {
-    color: "#FF0000",
     fontWeight: "700",
     fontSize: 18,
   },
 });
 
-export default DailyDietDetailScreen;
+export default DietTrashCanScreen;
