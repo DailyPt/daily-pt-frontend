@@ -20,9 +20,10 @@ const AddDietRecordScreen = () => {
 
   const authContext = useContext(AuthContext);
 
-  const { food, dietRecord } = route.params;
+  const { food, image, dietRecord } = route.params;
   console.log(food);
   console.log(dietRecord);
+  console.log(image);
 
   const saveRecord = async () => {
     try {

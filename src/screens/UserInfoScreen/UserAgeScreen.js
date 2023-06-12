@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 import {
   Text,
   View,
@@ -6,12 +6,12 @@ import {
   Dimensions,
   Platform,
   KeyboardAvoidingView,
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import UserInfoButton from '../../components/UserInfoButton';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigation, useRoute } from '@react-navigation/native';
+} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import UserInfoButton from "../../components/UserInfoButton";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const UserAgeScreen = () => {
   const navigation = useNavigation();
@@ -28,20 +28,21 @@ const UserAgeScreen = () => {
     setSelectedDate(currentDate);
   };
 
+  console.log(selectedDate);
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.select({ ios: 'padding' })}
+      behavior={Platform.select({ ios: "padding" })}
     >
       <View>
-        {/* 이름 변수 처리 예정 */}
         <Text style={styles.title}>{name} 님의 생일을 알려주세요.</Text>
         <Text style={styles.detail}>만 나이를 기준으로 관리해드릴게요!</Text>
         <DateTimePicker
           style={styles.picker}
           value={selectedDate}
           display="spinner"
-          mode={'date'}
+          mode={"date"}
           onChange={handleDateChange}
           maximumDate={new Date()}
         />
@@ -49,7 +50,7 @@ const UserAgeScreen = () => {
         <UserInfoButton
           title="다음"
           onPress={() =>
-            navigation.navigate('Height', {
+            navigation.navigate("Height", {
               name: name,
               birth: selectedDate.toLocaleDateString().toString(),
             })
@@ -69,30 +70,30 @@ UserAgeScreen.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   title: {
-    position: 'absolute',
-    top: Dimensions.get('window').height * 0.1,
-    left: Dimensions.get('window').width * 0.06,
+    position: "absolute",
+    top: Dimensions.get("window").height * 0.1,
+    left: Dimensions.get("window").width * 0.06,
     fontSize: 26,
-    fontWeight: '900',
+    fontWeight: "900",
   },
   detail: {
-    position: 'absolute',
-    top: Dimensions.get('window').height * 0.15,
-    left: Dimensions.get('window').width * 0.06,
+    position: "absolute",
+    top: Dimensions.get("window").height * 0.15,
+    left: Dimensions.get("window").width * 0.06,
     fontSize: 16,
-    color: '#666666',
+    color: "#666666",
   },
   picker: {
-    position: 'absolute',
-    top: Dimensions.get('window').height * 0.33,
-    left: Dimensions.get('window').width * 0.06,
-    width: Dimensions.get('window').width * 0.9,
-    justifyContent: 'center',
+    position: "absolute",
+    top: Dimensions.get("window").height * 0.33,
+    left: Dimensions.get("window").width * 0.06,
+    width: Dimensions.get("window").width * 0.9,
+    justifyContent: "center",
   },
 });
 

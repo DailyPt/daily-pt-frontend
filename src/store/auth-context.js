@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useState } from 'react';
-import { checkIsLogged } from '../api/checkIsLogged';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, useState } from "react";
+import { checkIsLogged } from "../api/checkIsLogged";
 
 export const AuthContext = createContext({
-  token: '',
+  token: "",
   isProfileLogged: false,
   isAuthenticated: false,
   authenticate: () => {},
@@ -19,13 +19,13 @@ const AuthContextProvider = ({ children }) => {
     setAuthToken(token);
     setIsLogged(await checkIsLogged(token));
 
-    AsyncStorage.setItem('token', token);
+    AsyncStorage.setItem("token", token);
   };
 
   const signOut = () => {
     setAuthToken(null);
     setIsLogged(false);
-    AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem("token");
   };
 
   const value = {

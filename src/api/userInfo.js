@@ -41,6 +41,8 @@ export async function getUserInfo(token) {
 
     const userInfo = response.data.data;
 
+    console.log(userInfo);
+
     return userInfo;
   } catch (error) {
     console.log("Get UserInfo error: ", error);

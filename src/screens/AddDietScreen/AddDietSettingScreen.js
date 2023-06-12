@@ -53,13 +53,7 @@ const AddDietSettingScreen = () => {
   }
   dietRecord.append("rating", String(ratingValue));
   dietRecord.append("quantity", String(quantity));
-
-  const options = {
-    timeZone: "Asia/Seoul",
-    hour12: false,
-  };
-
-  dietRecord.append("date", selectedDate.toLocaleString("en-US", options));
+  dietRecord.append("date", selectedDate.toISOString());
 
   return (
     <View style={styles.container}>
@@ -269,6 +263,7 @@ const AddDietSettingScreen = () => {
             onPress={() =>
               navigation.navigate("AddDietRecord", {
                 food,
+                image,
                 dietRecord,
               })
             }

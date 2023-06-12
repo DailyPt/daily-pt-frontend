@@ -1,41 +1,272 @@
 /* eslint-disable react/prop-types */
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Pressable } from "react-native";
 import SummaryButton, {
   TITLE,
   SUBTITLE,
   IMAGE,
-} from '../../components/SummaryButton';
-import { useNavigation } from '@react-navigation/native';
+} from "../../components/SummaryButton";
+import ProgressBar from "react-native-progress/Bar";
+import { useNavigation } from "@react-navigation/native";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../../store/auth-context";
+import { getDietRecord } from "../../api/dietRecord";
+import { getUserInfo } from "../../api/userInfo";
 
 const DietSummaryScreen = ({ title }) => {
   const navigation = useNavigation();
+  const authContext = useContext(AuthContext);
+
+  const [todayRecord, setTodayRecord] = useState([]);
+  const [userBmr, setUserBmr] = useState();
+
+  const dt = new Date(title);
+  const start =
+    dt.getFullYear() +
+    "-" +
+    (dt.getMonth() + 1).toString().padStart(2, "0") +
+    "-" +
+    (dt.getDate() - 1) +
+    "T15:00:00.000Z";
+
+  const end =
+    dt.getFullYear() +
+    "-" +
+    (dt.getMonth() + 1).toString().padStart(2, "0") +
+    "-" +
+    dt.getDate() +
+    "T15:00:00.000Z";
+
+  console.log(start);
+
+  console.log(end);
+
+  useEffect(() => {
+    const fetchRecord = async () => {
+      try {
+        const receivedInfo = await getDietRecord(authContext.token, start, end);
+
+        setTodayRecord(receivedInfo);
+      } catch (error) {
+        console.error("Error fetching dietRecord:", error);
+      }
+    };
+
+    fetchRecord();
+  }, [authContext.token, title]);
+
+  console.log(todayRecord);
+
+  useEffect(() => {
+    const fetchUserBmr = async () => {
+      try {
+        const bmr = await getUserInfo(authContext.token);
+
+        setUserBmr(Math.round(bmr.bmr));
+      } catch (error) {
+        console.error("Error fetching userInfo: ", error);
+      }
+    };
+
+    fetchUserBmr();
+  }, [authContext.token]);
+
+  console.log("bmr: ", userBmr);
+
+  let kcal = 0;
+  let carbohydrate = 0;
+  let protein = 0;
+  let fat = 0;
+
+  if (todayRecord && todayRecord.length) {
+    for (let i = 0; i < todayRecord.length; i++) {
+      if (todayRecord[i].id !== null) {
+        kcal += Math.round(parseFloat(todayRecord[i].food.kcal));
+        carbohydrate += Math.round(
+          parseFloat(todayRecord[i].food.carbohydrate)
+        );
+        protein += Math.round(parseFloat(todayRecord[i].food.protein));
+        fat += Math.round(parseFloat(todayRecord[i].food.fat));
+      }
+    }
+  }
+
+  const progressKcal = kcal / userBmr;
+  const progressCarbo = carbohydrate / (userBmr * 0.65);
+  const progressProtein = protein / (userBmr * 0.15);
+  const progressFat = fat / (userBmr * 0.2);
 
   return (
     <View style={styles.container}>
       <View style={styles.calorie}>
-        <SummaryButton
-          title={TITLE.CALORIES}
-          subTitle={SUBTITLE.CALORIES}
-          imageRoute={IMAGE.CALORIES}
-        />
+        <Pressable style={styles.button}>
+          <Text style={styles.subTitle}>오늘의 영양소 정보</Text>
+          <View style={{ position: "absolute", top: "22%", left: "10%" }}>
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginVertical: 10,
+                }}
+              >
+                <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                  <Text style={{ fontSize: 20, fontWeight: "700" }}>열량</Text>
+                </View>
+                <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {kcal} kcal
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                    width: Dimensions.get("window").width * 0.44,
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* <ProgressBar
+                    progress={progressKcal}
+                    width={100}
+                    height={15}
+                    borderRadius={8}
+                    unfilledColor={"#E6E6E6"}
+                    color={"#AD94F7"}
+                  /> */}
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                marginVertical: 10,
+              }}
+            >
+              <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                  탄수화물
+                </Text>
+              </View>
+              <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "700",
+                  }}
+                >
+                  {carbohydrate} g
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  position: "relative",
+                  width: Dimensions.get("window").width * 0.44,
+                  justifyContent: "center",
+                }}
+              >
+                {/* <Progress.Bar
+                  progress={progressCarbo}
+                  width={100}
+                  height={15}
+                  borderRadius={8}
+                  unfilledColor={"#E6E6E6"}
+                  color={"#AD94F7"}
+                /> */}
+              </View>
+            </View>
+            <View>
+              <View style={{ flexDirection: "row", marginVertical: 10 }}>
+                <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                  <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                    단백질
+                  </Text>
+                </View>
+                <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {protein} g
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                    width: Dimensions.get("window").width * 0.44,
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* <Progress.Bar
+                    progress={progressProtein}
+                    width={100}
+                    height={15}
+                    borderRadius={8}
+                    unfilledColor={"#E6E6E6"}
+                    color={"#AD94F7"}
+                  /> */}
+                </View>
+              </View>
+            </View>
+            <View>
+              <View style={{ flexDirection: "row", marginVertical: 10 }}>
+                <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                  <Text style={{ fontSize: 20, fontWeight: "700" }}>지방</Text>
+                </View>
+                <View style={{ width: Dimensions.get("window").width * 0.22 }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {fat} g
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                    width: Dimensions.get("window").width * 0.44,
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* <Progress.Bar
+                    progress={progressFat}
+                    width={100}
+                    height={15}
+                    borderRadius={8}
+                    unfilledColor={"#E6E6E6"}
+                    color={"#AD94F7"}
+                  /> */}
+                </View>
+              </View>
+            </View>
+          </View>
+        </Pressable>
       </View>
       <View style={styles.record}>
         <SummaryButton
           title={TITLE.RECORD}
           subTitle={SUBTITLE.RECORD}
           imageRoute={IMAGE.RECORD}
-          onPress={() => navigation.navigate('DietDetail')}
+          onPress={() => navigation.navigate("DaySelect")}
         />
       </View>
-
-      <Text>Diet Summary for {title}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     top: 80,
     left: 0,
     bottom: 0,
@@ -43,18 +274,52 @@ const styles = StyleSheet.create({
     zIndex: 10,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: '#F8F8FA',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#F8F8FA",
+    justifyContent: "center",
+    alignItems: "center",
   },
   calorie: {
-    position: 'absolute',
-    top: '5%',
+    position: "absolute",
+    top: "5%",
     marginBottom: 20,
   },
   record: {
-    position: 'relative',
+    position: "absolute",
+    top: "47%",
     marginBottom: 20,
+  },
+  button: {
+    width: Dimensions.get("window").width * 0.88,
+    height: Dimensions.get("window").height * 0.3,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 3.84,
+    elevation: 3,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  title: {
+    color: "#222222",
+    fontWeight: "700",
+    fontSize: 25,
+    position: "absolute",
+    top: "30%",
+    left: "10%",
+  },
+
+  subTitle: {
+    color: "#666666",
+    fontWeight: "500",
+    fontSize: 15,
+    position: "absolute",
+    top: "12%",
+    left: "10%",
   },
 });
 

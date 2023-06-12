@@ -62,7 +62,6 @@ const AddDietImageScreen = () => {
 
       const formData = new FormData();
       formData.append("photo", photo);
-      // will be erased
       formData.append("foodId", "1");
       formData.append("memo", "메모");
       formData.append("rating", "5");

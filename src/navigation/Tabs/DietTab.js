@@ -1,11 +1,12 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-import { Image, Pressable } from 'react-native';
-import DailyDietSummaryScreen from '../../screens/DietScreen/DailyDietSummaryScreen';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import DailyDietDetailScreen from '../../screens/DietScreen/DailyDietDetailScreen';
-import { useContext } from 'react';
-import { AuthContext } from '../../store/auth-context';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { Image, Pressable } from "react-native";
+import DailyDietSummaryScreen from "../../screens/DietScreen/DailyDietSummaryScreen";
+import DailyDietDetailScreen from "../../screens/DietScreen/DailyDietDetailScreen";
+import DietDaySelectScreen from "../../screens/DietScreen/DietDaySelectScreen";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ function LogoTitle() {
   return (
     <Image
       style={{ width: 80, height: 46 }}
-      source={require('../../../assets/Daily_PT_icon_white.png')}
+      source={require("../../../assets/Daily_PT_icon_white.png")}
     />
   );
 }
@@ -25,11 +26,11 @@ const DietTab = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        contentStyle: { backgroundColor: '#F8F8FA' },
+        contentStyle: { backgroundColor: "#F8F8FA" },
         headerTitle: (props) => <LogoTitle {...props} />,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#AD94F7',
+          backgroundColor: "#AD94F7",
           height: 100,
         },
       }}
@@ -44,7 +45,7 @@ const DietTab = () => {
                 <MaterialCommunityIcons
                   name="logout"
                   size={24}
-                  color={'#fff'}
+                  color={"#fff"}
                 />
               </Pressable>
             );
@@ -52,7 +53,7 @@ const DietTab = () => {
           headerRight: () => {
             return (
               <Pressable
-                onPress={() => navigation.navigate('SettingStack')}
+                onPress={() => navigation.navigate("SettingStack")}
                 hitSlop={10}
               >
                 <MaterialCommunityIcons name="account" size={24} color="#fff" />
@@ -62,7 +63,28 @@ const DietTab = () => {
         }}
       />
       <Stack.Screen
-        name="DietDetail"
+        name="DaySelect"
+        component={DietDaySelectScreen}
+        options={{
+          headerLeft: ({ canGoBack }) => {
+            if (!canGoBack) {
+              return null;
+            }
+
+            return (
+              <Pressable onPress={navigation.goBack} hitSlop={10}>
+                <MaterialCommunityIcons
+                  name="chevron-left"
+                  size={24}
+                  color="#fff"
+                />
+              </Pressable>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DailyDietDetail"
         component={DailyDietDetailScreen}
         options={{
           headerLeft: ({ canGoBack }) => {
@@ -84,9 +106,9 @@ const DietTab = () => {
             return (
               <Pressable hitSlop={10}>
                 <MaterialCommunityIcons
-                  name="calendar-month"
+                  name="trash-can"
                   size={24}
-                  color={'#fff'}
+                  color={"#fff"}
                 />
               </Pressable>
             );

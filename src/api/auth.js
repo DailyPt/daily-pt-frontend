@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const FB_API_KEY = 'AIzaSyBwrN_vifw37waZ8PH5knP92IVLzD7PDms'; // 환경변수로 숨기기
+const FB_API_KEY = "AIzaSyBwrN_vifw37waZ8PH5knP92IVLzD7PDms"; // 환경변수로 숨기기
 
 async function refreshAuthToken(refreshToken) {
   const url = `https://securetoken.googleapis.com/v1/token?key=${FB_API_KEY}`;
@@ -8,12 +8,12 @@ async function refreshAuthToken(refreshToken) {
   const response = await axios.post(
     url,
     {
-      grant_type: 'refresh_token',
+      grant_type: "refresh_token",
       refresh_token: refreshToken,
     },
     {
       headers: {
-        'Content-Type': `application/x-www-form-urlencoded`,
+        "Content-Type": `application/x-www-form-urlencoded`,
       },
     }
   );
@@ -45,9 +45,9 @@ export async function authenticate(mode, email, password) {
 }
 
 export function createUser(email, password) {
-  return authenticate('signUp', email, password);
+  return authenticate("signUp", email, password);
 }
 
 export function signIn(email, password) {
-  return authenticate('signInWithPassword', email, password);
+  return authenticate("signInWithPassword", email, password);
 }

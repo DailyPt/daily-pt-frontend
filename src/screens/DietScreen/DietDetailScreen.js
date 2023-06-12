@@ -1,4 +1,7 @@
 /* eslint-disable react/prop-types */
+
+// 식단 상세 화면 (id) 이용 --> 식단 수정 및 삭제 기능 추가
+
 import {
   Text,
   StyleSheet,
@@ -6,9 +9,9 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
-} from 'react-native';
-import { AuthContext } from '../../store/auth-context';
-import { useContext } from 'react';
+} from "react-native";
+import { AuthContext } from "../../store/auth-context";
+import { useContext } from "react";
 
 const DietDetailScreen = ({ title }) => {
   const authContext = useContext(AuthContext);
@@ -36,27 +39,28 @@ const DietDetailScreen = ({ title }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     top: 80,
     left: 0,
-    bottom: 0,
     right: 0,
     zIndex: 10,
+    height: Dimensions.get("window").height * 0.5,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: '#F8F8FA',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#F8F8FA",
+    justifyContent: "center",
+    alignItems: "center",
   },
   detailContainer: {
-    top: '5%',
+    top: "5%",
+    height: Dimensions.get("window").height * 0.3,
   },
   detail: {
-    width: Dimensions.get('window').width * 0.8,
-    height: Dimensions.get('window').height * 0.3,
-    backgroundColor: '#fff',
+    width: Dimensions.get("window").width * 0.8,
+    height: Dimensions.get("window").height * 0.3,
+    backgroundColor: "#fff",
     borderRadius: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 5,
