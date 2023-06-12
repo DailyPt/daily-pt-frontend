@@ -15,14 +15,17 @@ const AddNutrientSettingScreen = () => {
   const route = useRoute();
 
   const { supplement } = route.params;
+  console.log(supplement);
 
   const [selectedDays, setSelectedDays] = useState([]);
 
   const handleDayPress = (day) => {
-    if (selectedDays.includes(day)) {
-      setSelectedDays(selectedDays.filter((date) => date !== day));
+    const normalizedDay = day; // Normalize Sunday to 6, shift other days by 1
+
+    if (selectedDays.includes(normalizedDay)) {
+      setSelectedDays(selectedDays.filter((date) => date !== normalizedDay));
     } else {
-      setSelectedDays([...selectedDays, day]);
+      setSelectedDays([...selectedDays, normalizedDay]);
     }
   };
 
@@ -85,6 +88,7 @@ const AddNutrientSettingScreen = () => {
   const [quantity, setQuantity] = useState(0);
 
   const nutrientRoutine = {
+    suppId: supplement.id,
     days: selectedDays, // array
     count: count,
     times: times,
@@ -127,7 +131,7 @@ const AddNutrientSettingScreen = () => {
         <ScrollView
           style={{
             position: "absolute",
-            top: "20%",
+            top: "27%",
             height: "60%",
           }}
         >
@@ -150,37 +154,37 @@ const AddNutrientSettingScreen = () => {
               <DayPicker
                 title={"일"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("일")}
+                onPress={() => handleDayPress(0)}
               />
               <DayPicker
                 title={"월"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("월")}
+                onPress={() => handleDayPress(1)}
               />
               <DayPicker
                 title={"화"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("화")}
+                onPress={() => handleDayPress(2)}
               />
               <DayPicker
                 title={"수"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("수")}
+                onPress={() => handleDayPress(3)}
               />
               <DayPicker
                 title={"목"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("목")}
+                onPress={() => handleDayPress(4)}
               />
               <DayPicker
                 title={"금"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("금")}
+                onPress={() => handleDayPress(5)}
               />
               <DayPicker
                 title={"토"}
                 selectedDays={selectedDays}
-                onPress={() => handleDayPress("토")}
+                onPress={() => handleDayPress(6)}
               />
             </View>
           </View>

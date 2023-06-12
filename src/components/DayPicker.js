@@ -2,10 +2,15 @@ import React from "react";
 import { Pressable, Text, StyleSheet } from "react-native";
 
 const DayPicker = ({ title, selectedDays, onPress }) => {
-  const isDaySelected = selectedDays.includes(title);
+  const getDayValue = (dayTitle) => {
+    const days = ["일", "월", "화", "수", "목", "금", "토"];
+    return days.indexOf(dayTitle);
+  };
+
+  const isDaySelected = selectedDays.includes(getDayValue(title));
 
   const handlePress = () => {
-    onPress(title);
+    onPress(getDayValue(title));
   };
 
   return (
