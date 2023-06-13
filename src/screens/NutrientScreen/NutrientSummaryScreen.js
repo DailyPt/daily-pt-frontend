@@ -1,51 +1,78 @@
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, Text } from "react-native";
 import SummaryButton, {
-  TITLE,
-  SUBTITLE,
   IMAGE,
-} from '../../components/SummaryButton';
-import SummaryHalfButton, {
-  HALFSUBTITLE,
-  HALFTITLE,
-  HALFIMAGE,
-} from '../../components/SummaryHalfButton';
-import { useNavigation } from '@react-navigation/native';
+  SUBTITLE,
+  TITLE,
+} from "../../components/SummaryButton";
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../store/auth-context";
+import { useState, useContext, useEffect } from "react";
+import { getNutrientRecord } from "../../api/nutrientRoutine";
 
 const NutrientSummaryScreen = () => {
   const navigation = useNavigation();
+  const authContext = useContext(AuthContext);
+  const [record, setRecord] = useState();
+
+  useEffect(() => {
+    const fetchNutrient = async () => {
+      try {
+        const receivedInfo = await getNutrientRecord(authContext.token);
+        setRecord(receivedInfo);
+      } catch (error) {
+        console.error("Error fetching nutrient:", error);
+      }
+    };
+
+    fetchNutrient();
+  }, []);
+
+  console.log(record);
 
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Image
           style={styles.nutrient}
-          source={require('../../../assets/NutrientSummary.png')}
+          source={require("../../../assets/NutrientSummary.png")}
         />
       </View>
 
       <View style={styles.menu}>
-        <View style={{ position: 'absolute', top: '5%' }}>
+        <View style={styles.record}>
+          <Text
+            style={{
+              color: "#666666",
+              fontWeight: "500",
+              fontSize: 12,
+              paddingLeft: 10,
+              marginTop: 30,
+            }}
+          >
+            오늘은 어떤 영양제를 드셨나요?
+          </Text>
+          <Text
+            style={{
+              color: "#222222",
+              fontWeight: "700",
+              fontSize: 25,
+              marginVertical: 10,
+              paddingLeft: 10,
+            }}
+          >
+            오늘의 복용 기록
+          </Text>
+          <Image
+            style={{ position: "absolute", right: 30, bottom: 30 }}
+            source={require("../../../assets/NutrientSummaryCheck.png")}
+          />
+        </View>
+        <View>
           <SummaryButton
-            title={TITLE.NUT_STAT}
-            subTitle={SUBTITLE.NUT_STAT}
-            imageRoute={IMAGE.NUT_STAT}
-            onPress={() => navigation.navigate('NutrientDetail')}
-          />
-        </View>
-        <View style={{ position: 'absolute', top: '37%', left: '5%' }}>
-          <SummaryHalfButton
-            title={HALFTITLE.NUT_ALARM}
-            subTitle={HALFSUBTITLE.NUT_ALARM}
-            imageRoute={HALFIMAGE.NUT_ALARM}
-            onPress={() => navigation.navigate('NutrientDetail')}
-          />
-        </View>
-        <View style={{ position: 'absolute', top: '37%', right: '5%' }}>
-          <SummaryHalfButton
-            title={HALFTITLE.NUT_LIST}
-            subTitle={HALFSUBTITLE.NUT_LIST}
-            imageRoute={HALFIMAGE.NUT_LIST}
-            onPress={() => navigation.navigate('NutrientDetail')}
+            title={TITLE.LIST}
+            subTitle={SUBTITLE.LIST}
+            imageRoute={IMAGE.LIST}
+            onPress={() => navigation.navigate("NutrientDetail")}
           />
         </View>
       </View>
@@ -56,34 +83,50 @@ const NutrientSummaryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: Dimensions.get('window').width,
-    height: '50%',
-    backgroundColor: '#AD94F7',
-    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    height: "50%",
+    backgroundColor: "#AD94F7",
+    alignItems: "center",
   },
   nutrient: {
-    position: 'absolute',
-    top: '5%',
+    position: "absolute",
+    top: "5%",
   },
   menu: {
-    position: 'absolute',
-    top: '20%',
+    position: "absolute",
+    top: "20%",
     left: 0,
     bottom: 0,
     right: 0,
     zIndex: 10,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: '#F8F8FA',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#F8F8FA",
+    alignItems: "center",
+  },
+  record: {
+    width: Dimensions.get("window").width * 0.88,
+    height: Dimensions.get("window").height * 0.25,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 3.84,
+    elevation: 3,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginVertical: 20,
   },
 });
 

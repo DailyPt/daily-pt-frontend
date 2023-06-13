@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     top: "73%",
+    width: "90%",
     paddingVertical: 20,
   },
 });

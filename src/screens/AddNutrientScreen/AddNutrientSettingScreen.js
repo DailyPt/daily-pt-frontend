@@ -1,4 +1,11 @@
-import { View, StyleSheet, Text, Pressable, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  ScrollView,
+  Alert,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Button from "../../components/Button";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -15,12 +22,11 @@ const AddNutrientSettingScreen = () => {
   const route = useRoute();
 
   const { supplement } = route.params;
-  console.log(supplement);
 
   const [selectedDays, setSelectedDays] = useState([]);
 
   const handleDayPress = (day) => {
-    const normalizedDay = day; // Normalize Sunday to 6, shift other days by 1
+    const normalizedDay = day;
 
     if (selectedDays.includes(normalizedDay)) {
       setSelectedDays(selectedDays.filter((date) => date !== normalizedDay));
@@ -88,8 +94,8 @@ const AddNutrientSettingScreen = () => {
   const [quantity, setQuantity] = useState(0);
 
   const nutrientRoutine = {
-    suppId: supplement.id,
-    days: selectedDays, // array
+    supplementId: supplement.id,
+    days: selectedDays,
     count: count,
     times: times,
     quantity: quantity,
@@ -99,12 +105,26 @@ const AddNutrientSettingScreen = () => {
 
   const saveRoutine = async () => {
     try {
-      await saveNutrientRoutine(authContext.token, nutrientRoutine);
-      navigation.navigate("Main", { screen: "Nutrient" });
+      const result = await saveNutrientRoutine(
+        authContext.token,
+        nutrientRoutine
+      );
+      if (result === 200) {
+        Alert.alert("저장 완료", "영양제 루틴이 생성되었습니다!");
+        navigation.navigate("Main", { screen: "Nutrient" });
+      } else {
+        Alert.alert(
+          "저장 실패",
+          "영양제 루틴이 저장되지 않았습니다. 다시 시도해보세요!"
+        );
+      }
     } catch (error) {
       console.log("Error saving nutrient routine:", error);
     }
   };
+
+  const isCountZero = count === 0;
+  const isQuantityZero = quantity === 0;
 
   return (
     <View style={styles.container}>
@@ -121,6 +141,7 @@ const AddNutrientSettingScreen = () => {
           <View
             style={{
               width: "100%",
+              top: "22%",
               borderColor: "#E6E6E6",
               borderWidth: 3,
               borderBottomWidth: StyleSheet.hairlineWidth,
@@ -131,8 +152,8 @@ const AddNutrientSettingScreen = () => {
         <ScrollView
           style={{
             position: "absolute",
-            top: "27%",
-            height: "60%",
+            top: "30%",
+            height: "50%",
           }}
         >
           <View
@@ -277,8 +298,8 @@ const AddNutrientSettingScreen = () => {
           </Pressable>
           <Button
             title={"루틴 저장하기"}
-            // onPress={() => saveRoutine()}
-            onPress={() => navigation.navigate("Main", { screen: "Nutrient" })}
+            disabled={isQuantityZero || isCountZero}
+            onPress={() => saveRoutine()}
           />
         </View>
       </View>
