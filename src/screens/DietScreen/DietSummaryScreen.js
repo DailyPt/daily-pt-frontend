@@ -5,8 +5,6 @@ import SummaryButton, {
   SUBTITLE,
   IMAGE,
 } from "../../components/SummaryButton";
-// import { LinearProgress } from "react-native-elements";
-import * as Progress from "react-native-progress";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../store/auth-context";
