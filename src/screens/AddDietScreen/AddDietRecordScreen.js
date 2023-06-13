@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   recordButton: {
     position: "absolute",
     bottom: "10%",
+    width: "90%",
   },
 });
 

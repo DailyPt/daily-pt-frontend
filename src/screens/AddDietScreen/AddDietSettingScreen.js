@@ -55,6 +55,10 @@ const AddDietSettingScreen = () => {
   dietRecord.append("quantity", String(quantity));
   dietRecord.append("date", selectedDate.toISOString());
 
+  console.log(dietRecord);
+
+  const isQuantityZero = quantity === 0;
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -260,6 +264,7 @@ const AddDietSettingScreen = () => {
           </Pressable>
           <Button
             title={"수정하기"}
+            disabled={isQuantityZero}
             onPress={() =>
               navigation.navigate("AddDietRecord", {
                 food,
@@ -325,7 +330,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     top: "80%",
-    paddingVertical: 20,
+    marginVertical: 10,
+    width: "90%",
   },
 });
 

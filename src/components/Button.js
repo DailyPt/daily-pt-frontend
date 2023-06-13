@@ -26,7 +26,7 @@ Button.propTypes = {
 
 const styles = StyleSheet.create({
   button: {
-    width: Dimensions.get("window").width * 0.9,
+    width: "100%",
     height: 40,
     borderRadius: 10,
     alignItems: "center",

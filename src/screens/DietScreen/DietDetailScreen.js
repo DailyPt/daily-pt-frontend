@@ -84,6 +84,8 @@ const DietDetailScreen = () => {
     navigation.navigate("DailyDietDetail", { start: start, end: end });
   };
 
+  const isQuantityZero = quantity === 0;
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -208,6 +210,7 @@ const DietDetailScreen = () => {
             <View style={styles.setButton}>
               <Button
                 title={"수정하기"}
+                disabled={isQuantityZero}
                 onPress={() => {
                   updateDiet();
                 }}

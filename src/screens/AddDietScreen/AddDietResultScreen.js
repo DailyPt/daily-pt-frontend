@@ -18,7 +18,12 @@ const AddDietResultScreen = () => {
   const route = useRoute();
   const { image, uri, analysisResult } = route.params;
 
-  console.log(analysisResult.data[0]);
+  const food = analysisResult.data;
+  console.log(food.length);
+
+  const onPress = (food) => {
+    navigation.navigate("AddDietSetting", { image: image, food });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,28 +51,76 @@ const AddDietResultScreen = () => {
       <ScrollView style={styles.result}>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.resultTitle}>
-            {analysisResult.data[0].descKor}를 드셨군요!
+            {food.length === 0
+              ? "어떤 음식인지 모르겠어요..."
+              : "맛있는 식사를 하셨네요!"}
           </Text>
           <Text style={[styles.resultSubtitle]}>
             AI가 제대로 분석했는지 확인해주세요.
           </Text>
           <Image style={styles.resultImage} source={{ uri: uri }} />
-          {/* 음식 분석 결과 받아와 ListItem 형태로 출력  */}
-          <View style={styles.recordButton}>
+          <View style={{ marginVertical: 10, width: "90%" }}>
+            {food &&
+              food.map((record, index) => (
+                <View style={styles.foodContainer} key={index}>
+                  <View style={styles.food}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "700",
+                        paddingRight: 10,
+                      }}
+                    >
+                      {record.descKor}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: "#999999",
+                        marginTop: 15,
+                        paddingRight: 10,
+                      }}
+                    >
+                      {record.makerName
+                        ? `${record.foodGroup} / ${record.makerName}`
+                        : record.foodGroup}
+                    </Text>
+                  </View>
+
+                  <Text style={{ fontSize: 17, marginRight: 20 }}>
+                    {Math.round(record.kcal)} kcal
+                  </Text>
+
+                  <Pressable onPress={() => onPress(record)} hitSlop={30}>
+                    <MaterialCommunityIcons
+                      name="plus-circle"
+                      size={30}
+                      color={"#8B5CF6"}
+                    />
+                  </Pressable>
+                </View>
+              ))}
+          </View>
+
+          {/* <View style={styles.recordButton}>
             <Button
               title={"기록하기"}
               // 음식, 영양소 정보와 함께 navigate
               onPress={() =>
                 navigation.navigate("AddDietSetting", {
                   image: image,
-                  food: analysisResult.data[0],
+                  food: food,
                 })
               }
             />
-          </View>
+          </View> */}
 
           <View style={styles.search}>
-            <Text style={styles.searchTitle}>혹시 잘못 인식되었나요?</Text>
+            <Text style={styles.searchTitle}>
+              {food.length === 0
+                ? "음식명을 직접 검색해보세요!"
+                : "혹시 잘못 인식되었나요?"}
+            </Text>
             <MaterialCommunityIcons
               name="feature-search-outline"
               style={{
@@ -78,13 +131,14 @@ const AddDietResultScreen = () => {
               onPress={() =>
                 navigation.navigate("AddDietTextSearch", {
                   image: image,
+                  analysisResult: analysisResult,
                 })
               }
             />
           </View>
 
           <Text style={styles.searchSubtitle}>
-            음식명이나 카테고리를 통해 검색해보세요
+            {food.length === 0 ? "" : "음식명을 직접 검색해보세요!"}
           </Text>
         </View>
       </ScrollView>
@@ -125,16 +179,13 @@ const styles = StyleSheet.create({
   titleImage: {
     width: 110,
     height: 110,
-    position: "absolute",
-    top: 0,
   },
   resultImage: {
-    position: "absolute",
-    top: Dimensions.get("window").height * 0.1,
     width: 300,
-    height: 300,
+    height: 200,
     borderRadius: 25,
-    margin: 10,
+    marginVertical: 20,
+    resizeMode: "cover",
   },
   result: {
     flex: 1,
@@ -151,22 +202,20 @@ const styles = StyleSheet.create({
   resultTitle: {
     fontWeight: "700",
     fontSize: 25,
-    position: "absolute",
-    top: Dimensions.get("window").height * 0.03,
+    marginTop: 30,
+    marginVertical: 10,
   },
   resultSubtitle: {
     color: "#999999",
     fontSize: 15,
-    position: "absolute",
-    top: Dimensions.get("window").height * 0.07,
   },
   recordButton: {
-    position: "absolute",
-    top: Dimensions.get("window").height * 0.52,
+    width: Dimensions.get("window").width * 0.8,
+    marginVertical: 20,
   },
   search: {
     flexDirection: "row",
-    top: Dimensions.get("window").height * 0.6,
+    marginVertical: 10,
   },
 
   searchTitle: {
@@ -179,8 +228,21 @@ const styles = StyleSheet.create({
   searchSubtitle: {
     color: "#999999",
     fontSize: 15,
-    position: "absolute",
-    top: Dimensions.get("window").height * 0.64,
+  },
+
+  foodContainer: {
+    marginHorizontal: 10,
+    marginVertical: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderRadius: 20,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  food: {
+    flex: 1,
+    marginHorizontal: 5,
   },
 });
 

@@ -123,6 +123,9 @@ const AddDietImageScreen = () => {
         <Text style={[styles.subtitle, { position: "absolute", top: "43%" }]}>
           식단의 칼로리와 영양성분을 분석해드려요.
         </Text>
+        <Text style={[styles.subtitle, { position: "absolute", top: "47%" }]}>
+          사진 선택 후 잠시 기다려주세요!
+        </Text>
         <MaterialCommunityIcons
           name="alert"
           size={15}

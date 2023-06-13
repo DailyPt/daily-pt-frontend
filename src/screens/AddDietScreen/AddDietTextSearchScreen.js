@@ -18,7 +18,7 @@ import { getFoodList } from "../../api/food";
 const AddDietTextSearchScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { image } = route.params;
+  const { image, analysisResult } = route.params;
 
   console.log(image);
 
@@ -50,7 +50,7 @@ const AddDietTextSearchScreen = () => {
       <View style={styles.header}>
         <View style={styles.container}></View>
         <Pressable
-          onPress={() => navigation.navigate("AddDietResult", { image: image })}
+          onPress={() => navigation.goBack()}
           hitSlop={10}
           position={"absolute"}
           left={"5%"}
