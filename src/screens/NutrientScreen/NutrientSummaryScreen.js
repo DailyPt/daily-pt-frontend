@@ -37,10 +37,11 @@ const NutrientSummaryScreen = () => {
   console.log(record);
 
   const convertTimeFormat = (time) => {
-    const [hour, minute] = time.split(":");
-    const hourNumber = parseInt(hour, 10);
-    const meridiem = hourNumber < 12 ? "오전" : "오후";
-    const adjustedHour = hourNumber % 12 || 12;
+    const date = new Date(time);
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const meridiem = hour < 12 ? "오전" : "오후";
+    const adjustedHour = hour % 12 || 12;
     const convertedTime = `${meridiem} ${adjustedHour}시 ${minute}분`;
 
     return convertedTime;
@@ -63,7 +64,7 @@ const NutrientSummaryScreen = () => {
               fontWeight: "500",
               fontSize: 12,
               paddingLeft: 10,
-              marginTop: 30,
+              marginTop: 20,
             }}
           >
             오늘은 어떤 영양제를 드셨나요?
@@ -82,7 +83,7 @@ const NutrientSummaryScreen = () => {
 
           <ScrollView
             style={{
-              marginTop: 10,
+              marginVertical: 20,
               width: Dimensions.get("window").width * 0.78,
             }}
           >
