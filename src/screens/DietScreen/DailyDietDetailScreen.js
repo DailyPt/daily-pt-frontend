@@ -72,6 +72,8 @@ const DailyDietDetailScreen = () => {
     fetchRecord(authContext.token, start, end, setDietRecord);
   });
 
+  console.log(dietRecord);
+
   return (
     <View
       style={{

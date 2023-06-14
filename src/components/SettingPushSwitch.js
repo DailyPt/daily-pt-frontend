@@ -6,11 +6,108 @@ import {
   Image,
   Switch,
 } from "react-native";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 const SettingPushSwitch = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    Notifications.addNotificationResponseReceivedListener(() => {
+      navigation.navigate("Nutrient", { screen: "NutrientDetail" });
+    });
+  }, []);
+
+  useEffect(() => {
+    const loadPushNotificationSetting = async () => {
+      try {
+        const storedSetting = await AsyncStorage.getItem(
+          "pushNotificationSetting"
+        );
+        if (storedSetting !== null) {
+          setIsEnabled(JSON.parse(storedSetting));
+        }
+      } catch (error) {
+        console.log("Error loading push notification setting:", error);
+      }
+    };
+
+    loadPushNotificationSetting();
+  }, []);
+
+  useEffect(() => {
+    const savePushNotificationSetting = async () => {
+      try {
+        await AsyncStorage.setItem(
+          "pushNotificationSetting",
+          JSON.stringify(isEnabled)
+        );
+      } catch (error) {
+        console.log("Error saving push notification setting:", error);
+      }
+    };
+
+    savePushNotificationSetting();
+  }, [isEnabled]);
+
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+  };
+
+  const scheduleNotification = async () => {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+    if (status === "granted") {
+      const triggerTime = getTriggerTime();
+
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: "영양제 복용 알림",
+          body: "센트룸 드실 시간이예요!",
+          data: { userName: "Max" },
+        },
+        trigger: {
+          seconds: triggerTime,
+        },
+      });
+    }
+  };
+
+  const getTriggerTime = () => {
+    const now = new Date();
+    const notificationTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      18,
+      3,
+      0
+    );
+
+    if (notificationTime < now) {
+      notificationTime.setDate(now.getDate() + 1);
+    }
+
+    const millisecondsUntilNotification = notificationTime - now;
+
+    return Math.floor(millisecondsUntilNotification / 1000);
+  };
+
+  const cancelScheduledNotifications = () => {
+    Notifications.cancelAllScheduledNotificationsAsync();
+  };
+
+  useEffect(() => {
+    if (isEnabled) {
+      scheduleNotification();
+    } else {
+      cancelScheduledNotifications();
+    }
+  }, [isEnabled]);
 
   return (
     <View style={styles.push}>
