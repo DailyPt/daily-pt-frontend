@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Button from "../../components/Button";
 
 const AddDietResultScreen = () => {
   const navigation = useNavigation();
@@ -19,7 +18,7 @@ const AddDietResultScreen = () => {
   const { image, uri, analysisResult } = route.params;
 
   const food = analysisResult.data;
-  console.log(food.length);
+  console.log(food);
 
   const onPress = (food) => {
     navigation.navigate("AddDietSetting", { image: image, food });
@@ -55,7 +54,7 @@ const AddDietResultScreen = () => {
               ? "어떤 음식인지 모르겠어요..."
               : "맛있는 식사를 하셨네요!"}
           </Text>
-          <Text style={[styles.resultSubtitle]}>
+          <Text style={styles.resultSubtitle}>
             AI가 제대로 분석했는지 확인해주세요.
           </Text>
           <Image style={styles.resultImage} source={{ uri: uri }} />

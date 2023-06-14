@@ -11,30 +11,46 @@ import SummaryButton, {
   SUBTITLE,
   TITLE,
 } from "../../components/SummaryButton";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../../store/auth-context";
 import { useState, useContext, useEffect } from "react";
 import { getNutrientRecord } from "../../api/nutrientRoutine";
+
+const fetchNutrient = async (token, setRecord) => {
+  try {
+    const receivedInfo = await getNutrientRecord(token);
+    setRecord(receivedInfo);
+  } catch (error) {
+    console.error("Error fetching nutrient record:", error);
+  }
+};
 
 const NutrientSummaryScreen = () => {
   const navigation = useNavigation();
   const authContext = useContext(AuthContext);
   const [record, setRecord] = useState();
 
-  useEffect(() => {
-    const fetchNutrient = async () => {
-      try {
-        const receivedInfo = await getNutrientRecord(authContext.token);
-        setRecord(receivedInfo);
-      } catch (error) {
-        console.error("Error fetching nutrient:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchNutrient = async () => {
+  //     try {
+  //       const receivedInfo = await getNutrientRecord(authContext.token);
+  //       setRecord(receivedInfo);
+  //     } catch (error) {
+  //       console.error("Error fetching nutrient:", error);
+  //     }
+  //   };
 
-    fetchNutrient();
+  //   fetchNutrient();
+  // }, []);
+
+  // console.log(record);
+  useEffect(() => {
+    fetchNutrient(authContext.token, setRecord);
   }, []);
 
-  console.log(record);
+  useFocusEffect(() => {
+    fetchNutrient(authContext.token, setRecord);
+  });
 
   const convertTimeFormat = (time) => {
     const date = new Date(time);

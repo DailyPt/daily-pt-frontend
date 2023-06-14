@@ -161,7 +161,7 @@ export async function getNutrientRecord(token) {
       withCredentials: true,
     });
 
-    console.log("Get request successful:", response.data.message);
+    // console.log("Get request successful:", response.data.message);
 
     const nutrientRecord = response.data.data;
 

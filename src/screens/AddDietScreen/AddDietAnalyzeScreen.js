@@ -9,14 +9,6 @@ const AddDietAnalyzeScreen = () => {
   const { image, uri, analysisResult } = route.params;
 
   useEffect(() => {
-    // if (typeof analysisResult === "undefined") {
-    //   Alert.alert("인식 실패", "텍스트로 검색해보세요.");
-    //   navigation.navigate("AddDietTextSearch", {
-    //     image: image,
-    //   });
-    //   return;
-    // }
-
     const analysisTimeout = setTimeout(() => {
       navigation.navigate("AddDietResult", {
         image: image,

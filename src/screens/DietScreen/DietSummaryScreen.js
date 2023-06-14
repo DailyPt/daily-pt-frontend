@@ -44,23 +44,6 @@ const DietSummaryScreen = ({ title }) => {
     dt.getDate().toString().padStart(2, "0") +
     "T15:00:00.000Z";
 
-  // console.log(start);
-  // console.log(end);
-
-  // useEffect(() => {
-  //   const fetchRecord = async () => {
-  //     try {
-  //       const receivedInfo = await getDietRecord(authContext.token, start, end);
-
-  //       setTodayRecord(receivedInfo);
-  //     } catch (error) {
-  //       console.error("Error fetching dietRecord:", error);
-  //     }
-  //   };
-
-  //   fetchRecord();
-  // }, [authContext.token, title]);
-
   useEffect(() => {
     fetchRecord(authContext.token, start, end, setTodayRecord);
   }, [authContext.token]);
@@ -68,8 +51,6 @@ const DietSummaryScreen = ({ title }) => {
   useFocusEffect(() => {
     fetchRecord(authContext.token, start, end, setTodayRecord);
   });
-
-  // console.log(todayRecord);
 
   useEffect(() => {
     const fetchUserBmr = async () => {
@@ -96,14 +77,22 @@ const DietSummaryScreen = ({ title }) => {
     for (let i = 0; i < todayRecord.length; i++) {
       if (todayRecord[i].id !== null) {
         kcal += Math.round(parseFloat(todayRecord[i].food.kcal));
-        carbohydrate += Math.round(
+
+        const parsedCarbohydrate = Math.round(
           parseFloat(todayRecord[i].food.carbohydrate)
         );
-        protein += Math.round(parseFloat(todayRecord[i].food.protein));
-        fat += Math.round(parseFloat(todayRecord[i].food.fat));
+        carbohydrate += isNaN(parsedCarbohydrate) ? 0 : parsedCarbohydrate;
+        const parsedProtein = Math.round(
+          parseFloat(todayRecord[i].food.protein)
+        );
+        protein += isNaN(parsedProtein) ? 0 : parsedProtein;
+        const parsedFat = Math.round(parseFloat(todayRecord[i].food.fat));
+        fat += isNaN(parsedFat) ? 0 : parsedFat;
       }
     }
   }
+
+  console.log(carbohydrate);
 
   const progressKcal = (kcal / userBmr) * 100;
   const progressCarbo = (carbohydrate / (userBmr * 0.65)) * 100;
