@@ -46,7 +46,7 @@ export async function getDietRecord(token, start, end) {
       withCredentials: true,
     });
 
-    console.log("Get request successful:", response.data);
+    // console.log("Get request successful:", response.data);
 
     const dietRecord = response.data.data;
 

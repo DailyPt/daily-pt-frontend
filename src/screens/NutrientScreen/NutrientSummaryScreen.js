@@ -1,4 +1,11 @@
-import { View, Image, StyleSheet, Dimensions, Text } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Dimensions,
+  Text,
+  ScrollView,
+} from "react-native";
 import SummaryButton, {
   IMAGE,
   SUBTITLE,
@@ -28,6 +35,16 @@ const NutrientSummaryScreen = () => {
   }, []);
 
   console.log(record);
+
+  const convertTimeFormat = (time) => {
+    const [hour, minute] = time.split(":");
+    const hourNumber = parseInt(hour, 10);
+    const meridiem = hourNumber < 12 ? "오전" : "오후";
+    const adjustedHour = hourNumber % 12 || 12;
+    const convertedTime = `${meridiem} ${adjustedHour}시 ${minute}분`;
+
+    return convertedTime;
+  };
 
   return (
     <View style={styles.container}>
@@ -62,10 +79,62 @@ const NutrientSummaryScreen = () => {
           >
             오늘의 복용 기록
           </Text>
-          <Image
-            style={{ position: "absolute", right: 30, bottom: 30 }}
-            source={require("../../../assets/NutrientSummaryCheck.png")}
-          />
+
+          <ScrollView
+            style={{
+              marginTop: 10,
+              width: Dimensions.get("window").width * 0.78,
+            }}
+          >
+            {record &&
+              record.map((record, index) => (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    marginBottom: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: Dimensions.get("window").width * 0.4,
+                      marginRight: 5,
+                    }}
+                  >
+                    <Text
+                      style={{ fontSize: 18, fontWeight: "600" }}
+                      numberOfLines={1}
+                    >
+                      {record.nutrient.supplement.productName}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: Dimensions.get("window").width * 0.3,
+                      marginRight: 5,
+                    }}
+                  >
+                    <Text
+                      style={{ fontSize: 18, fontWeight: "600" }}
+                      numberOfLines={1}
+                    >
+                      {convertTimeFormat(record.date)}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: Dimensions.get("window").width * 0.08,
+                      marginRight: 5,
+                    }}
+                  >
+                    <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                      {record.nutrient.quantity}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+          </ScrollView>
         </View>
         <View>
           <SummaryButton

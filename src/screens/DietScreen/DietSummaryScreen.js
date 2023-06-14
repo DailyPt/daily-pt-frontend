@@ -5,11 +5,20 @@ import SummaryButton, {
   SUBTITLE,
   IMAGE,
 } from "../../components/SummaryButton";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { getDietRecord } from "../../api/dietRecord";
 import { getUserInfo } from "../../api/userInfo";
+
+const fetchRecord = async (token, start, end, setDietRecord) => {
+  try {
+    const receivedInfo = await getDietRecord(token, start, end);
+    setDietRecord(receivedInfo);
+  } catch (error) {
+    console.error("Error fetching dietRecord:", error);
+  }
+};
 
 const DietSummaryScreen = ({ title }) => {
   const navigation = useNavigation();
@@ -35,25 +44,32 @@ const DietSummaryScreen = ({ title }) => {
     dt.getDate().toString().padStart(2, "0") +
     "T15:00:00.000Z";
 
-  console.log(start);
+  // console.log(start);
+  // console.log(end);
 
-  console.log(end);
+  // useEffect(() => {
+  //   const fetchRecord = async () => {
+  //     try {
+  //       const receivedInfo = await getDietRecord(authContext.token, start, end);
+
+  //       setTodayRecord(receivedInfo);
+  //     } catch (error) {
+  //       console.error("Error fetching dietRecord:", error);
+  //     }
+  //   };
+
+  //   fetchRecord();
+  // }, [authContext.token, title]);
 
   useEffect(() => {
-    const fetchRecord = async () => {
-      try {
-        const receivedInfo = await getDietRecord(authContext.token, start, end);
+    fetchRecord(authContext.token, start, end, setTodayRecord);
+  }, [authContext.token]);
 
-        setTodayRecord(receivedInfo);
-      } catch (error) {
-        console.error("Error fetching dietRecord:", error);
-      }
-    };
+  useFocusEffect(() => {
+    fetchRecord(authContext.token, start, end, setTodayRecord);
+  });
 
-    fetchRecord();
-  }, [authContext.token, title]);
-
-  console.log(todayRecord);
+  // console.log(todayRecord);
 
   useEffect(() => {
     const fetchUserBmr = async () => {
@@ -69,7 +85,7 @@ const DietSummaryScreen = ({ title }) => {
     fetchUserBmr();
   }, [authContext.token]);
 
-  console.log("bmr: ", userBmr);
+  // console.log("bmr: ", userBmr);
 
   let kcal = 0;
   let carbohydrate = 0;

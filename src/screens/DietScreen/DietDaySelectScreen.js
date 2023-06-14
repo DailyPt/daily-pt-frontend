@@ -6,8 +6,17 @@ import { useNavigation } from "@react-navigation/native";
 const DietDaySelectScreen = () => {
   const navigation = useNavigation();
 
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
+  const [selectedEndDate, setSelectedEndDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
 
   const handleStartDateChange = (event, newDate) => {
     const currentDate = newDate || selectedStartDate;
